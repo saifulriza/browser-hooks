@@ -43,7 +43,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          dist/browser-hooks.js
+          dist/browser-hooks.umd.js
+          dist/browser-hooks.es.js
 
   publish:
     needs: build
