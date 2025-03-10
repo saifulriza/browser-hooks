@@ -4,6 +4,7 @@ A comprehensive collection of framework-agnostic browser API utilities exposed a
 
 #### Live Demo : https://saifulriza.github.io/browser-hooks
 #### Demo Code : https://github.com/saifulriza/browser-hooks/tree/main/examples
+#### API Refferences : https://saifulriza.github.io/browser-hooks/docs
 
 ## Installation
 
