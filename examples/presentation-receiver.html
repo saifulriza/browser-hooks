@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Receiver</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        .presentation-content {
+            text-align: center;
+        }
+        h1 { font-size: 2.5em; }
+    </style>
+</head>
+<body>
+    <div class="presentation-content">
+        <h1>Presentation Mode</h1>
+        <p>This is the secondary display content.</p>
+        <div id="status"></div>
+    </div>
+    <script type="module">
+        import { usePresentationAPI } from '../dist/browser-hooks.js';
+        
+        const presentation = usePresentationAPI();
+        const status = document.getElementById('status');
+
+        // Listen for presentation events
+        presentation.subscribe((state) => {
+            if (state.connection) {
+                status.textContent = 'Connected to presentation';
+            } else {
+                status.textContent = 'Disconnected from presentation';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+  "name": "browser-hooks",
+  "version": "1.0.0",
+  "description": "Framework agnostic browser API utilities",
+  "type": "module",
+  "main": "./dist/browser-hooks.umd.cjs",
+  "module": "./dist/browser-hooks.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/browser-hooks.js",
+      "require": "./dist/browser-hooks.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "preview": "vite preview",
+    "test": "jest",
+    "lint": "eslint src --ext .ts"
+  },
+  "keywords": [
+    "browser",
+    "api",
+    "hooks",
+    "utilities"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/dom-speech-recognition": "^0.0.4",
+    "@types/node": "^20.8.0",
+    "@types/serviceworker-webpack-plugin": "^1.0.7",
+    "@types/w3c-generic-sensor": "^1.0.10",
+    "@types/w3c-web-hid": "^1.0.6",
+    "@types/w3c-web-serial": "^1.0.8",
+    "@types/w3c-web-usb": "^1.0.10",
+    "@types/webextension-polyfill": "^0.12.3",
+    "@types/webxr": "^0.5.21",
+    "terser": "^5.20.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
+  },
+  "sideEffects": false
+}

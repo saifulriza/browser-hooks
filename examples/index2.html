@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser Hooks Examples</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .demo-section {
+        margin: 20px 0;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .demo-output {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 4px;
+        min-height: 24px;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+      button {
+        padding: 8px 16px;
+        margin: 4px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #f0f0f0;
+      }
+      .online {
+        background: green;
+      }
+      .offline {
+        background: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Browser Hooks Examples (A-Z)</h1>
+    <div id="demo-container">
+      <div class="demo-section" id="launchHandler">
+        <h2>Launch Handler</h2>
+        <p><small>Handles how the web app launches and processes launch parameters. Useful for custom startup behaviors and deep linking in Progressive Web Apps.</small></p>
+        <button id="registerHandler">Register Launch Handler</button>
+        <div class="demo-output" id="launchOutput"></div>
+      </div>
+
+      <div class="demo-section" id="localFontAccess">
+        <h2>Local Font Access</h2>
+        <p><small>Provides access to locally installed system fonts. Essential for design tools, text editors, and applications requiring custom typography.</small></p>
+        <div>
+          <span>Permission status: </span>
+          <span id="permissionStatus">checking...</span>
+        </div>
+        <button id="queryLocalFonts">Query System Fonts</button>
+        <select id="fontSelect" disabled>
+          <option>Select a font...</option>
+        </select>
+        <div class="font-preview" style="margin-top: 15px">
+          <textarea
+            id="fontDemo"
+            style="width: 100%; min-height: 100px; padding: 10px"
+            placeholder="Type something to preview the font..."
+          >
+The quick brown fox jumps over the lazy dog</textarea
+          >
+        </div>
+        <div class="demo-output" id="fontAccessOutput"></div>
+      </div>
+
+      <div class="demo-section" id="localStorage">
+        <h2>Local Storage</h2>
+        <p><small>Enables persistent data storage in the browser. Perfect for saving user preferences, application state, and offline data caching.</small></p>
+        <input type="text" id="storageKey" placeholder="Key" />
+        <input type="text" id="storageValue" placeholder="Value" />
+        <button id="setStorage">Set Value</button>
+        <button id="getStorage">Get Value</button>
+        <div class="demo-output" id="storageOutput"></div>
+      </div>
+
+      <div class="demo-section" id="mediaCapabilities">
+        <h2>Media Capabilities</h2>
+        <p><small>Provides information about the device's ability to play media. Useful for adaptive streaming and optimal format selection.</small></p>
+        <button id="checkVideoSupport">Check Video Support</button>
+        <button id="checkAudioSupport">Check Audio Support</button>
+        <div class="demo-output" id="mediaCapabilitiesOutput"></div>
+      </div>
+
+      <div class="demo-section" id="mediaRecorder">
+        <h2>Media Recorder</h2>
+        <p><small>Records audio and video streams from the user's device. Essential for voice messaging, screen recording, and video creation apps.</small></p>
+        <button id="startRecording">Start Recording</button>
+        <button id="stopRecording">Stop Recording</button>
+        <audio id="recordingPlayback" controls style="display: none"></audio>
+        <div class="demo-output" id="recorderOutput"></div>
+      </div>
+
+      <div class="demo-section" id="mediaSession">
+        <h2>Media Session</h2>
+        <p><small>Controls media playback through system UI. Great for music players, podcasts apps, and media-rich websites.</small></p>
+        <audio id="audioPlayer" controls src="path/to/audio.mp3"></audio>
+        <button id="updateMetadata">Update Media Metadata</button>
+        <div class="demo-output" id="mediaSessionOutput"></div>
+      </div>
+
+      <div class="demo-section" id="mediaStream">
+        <h2>Media Stream</h2>
+        <p><small>Captures audio and video streams from user devices. Fundamental for video chat, live streaming, and camera-based applications.</small></p>
+        <video
+          id="streamPreview"
+          autoplay
+          playsinline
+          style="width: 300px"
+        ></video>
+        <button id="startStream">Start Stream</button>
+        <button id="stopStream">Stop Stream</button>
+        <div class="demo-output" id="streamOutput"></div>
+      </div>
+
+      <div class="demo-section" id="messageChannel">
+        <h2>Message Channel</h2>
+        <p><small>Enables two-way communication between browser contexts. Useful for communication between iframes, workers, and window instances.</small></p>
+        <div style="display: flex; gap: 20px">
+          <div>
+            <input
+              type="text"
+              id="port1Message"
+              placeholder="Message for Port 1"
+            />
+            <button id="sendPort1">Send to Port 1</button>
+            <div class="demo-output" id="port1Output"></div>
+          </div>
+          <div>
+            <input
+              type="text"
+              id="port2Message"
+              placeholder="Message for Port 2"
+            />
+            <button id="sendPort2">Send to Port 2</button>
+            <div class="demo-output" id="port2Output"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-section" id="navigation">
+        <h2>Navigation</h2>
+        <p><small>Controls browser navigation and history. Essential for single-page applications and custom navigation experiences.</small></p>
+        <button id="navigateDemo">Navigate</button>
+        <button id="navigateBack">Go Back</button>
+        <button id="navigateForward">Go Forward</button>
+        <div class="demo-output" id="navigationOutput"></div>
+      </div>
+
+      <div class="demo-section" id="network">
+        <h2>Network</h2>
+        <p><small>Monitors network connectivity status. Critical for offline-first applications and network-aware features.</small></p>
+        <div class="demo-output" id="networkOutput"></div>
+      </div>
+
+      <div class="demo-section" id="notifications">
+        <h2>Notifications</h2>
+        <p><small>Displays system notifications to users. Perfect for messaging apps, social media, and event reminders.</small></p>
+        <button id="requestNotification">Request Permission</button>
+        <button id="showNotification">Show Notification</button>
+        <div class="demo-output" id="notificationOutput"></div>
+      </div>
+
+      <div class="demo-section" id="pageVisibility">
+        <h2>Page Visibility</h2>
+        <p><small>Detects when a page is visible or hidden. Useful for pausing media, saving resources, and tracking user engagement.</small></p>
+        <div class="demo-output" id="visibilityOutput"></div>
+      </div>
+
+      <div class="demo-section" id="paymentRequest">
+        <h2>Payment Request</h2>
+        <p><small>Standardizes the payment flow in web applications. Essential for e-commerce and digital payment processing.</small></p>
+        <button id="requestPayment">Request Payment</button>
+        <div class="demo-output" id="paymentOutput"></div>
+      </div>
+
+      <div class="demo-section" id="pointerEvents">
+        <h2>Pointer Events</h2>
+        <p><small>Handles mouse, touch, and pen input uniformly. Perfect for drawing apps, games, and interactive interfaces.</small></p>
+        <div
+          id="pointerArea"
+          style="
+            width: 300px;
+            height: 200px;
+            background: #f0f0f0;
+            position: relative;
+          "
+        >
+          <div
+            id="pointerDot"
+            style="
+              width: 10px;
+              height: 10px;
+              background: red;
+              border-radius: 50%;
+              position: absolute;
+            "
+          ></div>
+        </div>
+        <div class="demo-output" id="pointerEventsOutput"></div>
+      </div>
+
+      <div class="demo-section" id="pointerLock">
+        <h2>Pointer Lock</h2>
+        <p><small>Locks the pointer to the content area. Essential for first-person games, 3D applications, and immersive experiences.</small></p>
+        <div
+          id="lockTarget"
+          style="
+            width: 200px;
+            height: 200px;
+            background: #2196f3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+          "
+        >
+          Click to lock pointer
+        </div>
+        <div class="demo-output" id="pointerLockOutput"></div>
+      </div>
+
+      <div class="demo-section" id="popover">
+        <h2>Popover</h2>
+        <p><small>Manages popup content with built-in positioning and focus handling. Perfect for tooltips, menus, and modal dialogs.</small></p>
+        <button id="showPopover">Show Popover</button>
+        <div id="demoPopover" class="popover-content" popover="manual">
+          <h4>Popover Content</h4>
+          <p>This is a custom popover.</p>
+          <button id="closePopover">Close</button>
+        </div>
+      </div>
+
+      <div class="demo-section" id="presentationAPI">
+        <h2>Presentation API</h2>
+        <p><small>Controls presentation displays from web content. Ideal for slideshows, digital signage, and second-screen experiences.</small></p>
+        <button id="startPresentation">Start Presentation</button>
+        <button id="stopPresentation">Stop Presentation</button>
+        <div class="demo-output" id="presentationOutput"></div>
+      </div>
+
+      <div class="demo-section" id="pushAPI">
+        <h2>Push API</h2>
+        <p><small>Enables web apps to receive push messages from a server. Essential for real-time notifications and content updates.</small></p>
+        <button id="subscribePush">Subscribe to Push</button>
+        <button id="unsubscribePush">Unsubscribe</button>
+        <div class="demo-output" id="pushOutput"></div>
+      </div>
+
+      <div class="demo-section" id="realtime">
+        <h2>Realtime API</h2>
+        <p><small>Facilitates real-time communication between clients. Perfect for chat applications, collaborative tools, and live updates.</small></p>
+        <button id="connectRealtime">Connect</button>
+        <button id="disconnectRealtime">Disconnect</button>
+        <div style="margin-top: 10px">
+          <input type="text" id="realtimeMessage" placeholder="Enter message" />
+          <button id="sendRealtimeMessage">Send Message</button>
+        </div>
+        <div class="demo-output" id="realtimeOutput"></div>
+      </div>
+
+      <div class="demo-section" id="reportingAPI">
+        <h2>Reporting API</h2>
+        <p><small>Provides detailed reports about browser-level issues. Useful for monitoring errors, performance, and security violations.</small></p>
+        <button id="generateReport">Generate Report</button>
+        <button id="triggerError">Trigger Error</button>
+        <div class="demo-output" id="reportingOutput"></div>
+      </div>
+
+      <div class="demo-section" id="resizeObserver">
+        <h2>Resize Observer</h2>
+        <p><small>Monitors changes to element dimensions. Essential for responsive layouts, dynamic UI, and size-dependent features.</small></p>
+        <div
+          id="resizeTarget"
+          style="
+            width: 200px;
+            height: 100px;
+            background: #f0f0f0;
+            resize: both;
+            overflow: auto;
+          "
+        >
+          Resize this element
+        </div>
+        <div class="demo-output" id="resizeOutput"></div>
+      </div>
+
+      <div class="demo-section" id="resourceTiming">
+        <h2>Resource Timing</h2>
+        <p><small>Measures loading performance of application resources. Critical for performance monitoring and optimization.</small></p>
+        <button id="measureResource">Measure Resource</button>
+        <button id="clearResourceTimings">Clear Timings</button>
+        <div class="demo-output" id="resourceTimingOutput"></div>
+      </div>
+
+      <div class="demo-section" id="scheduler">
+        <h2>Scheduler</h2>
+        <p><small>Schedules tasks with priority handling. Useful for managing background work and optimizing task execution.</small></p>
+        <button id="scheduleTask">Schedule Task</button>
+        <button id="cancelTask">Cancel Task</button>
+        <div class="demo-output" id="schedulerOutput"></div>
+      </div>
+
+      <div class="demo-section" id="screenCapture">
+        <h2>Screen Capture</h2>
+        <p><small>Captures screen content as media streams. Perfect for screen recording, remote assistance, and presentation tools.</small></p>
+        <video
+          id="screenPreview"
+          autoplay
+          playsinline
+          style="width: 300px"
+        ></video>
+        <button id="startScreenCapture">Start Capture</button>
+        <button id="stopScreenCapture">Stop Capture</button>
+        <div class="demo-output" id="screenCaptureOutput"></div>
+      </div>
+
+      <div class="demo-section" id="wakeLock">
+        <h2>Wake Lock</h2>
+        <p><small>Prevents device from sleeping while app is active. Essential for presentation, video playback, and long-running tasks.</small></p>
+        <button id="requestWakeLock">Keep Screen On</button>
+        <div class="demo-output" id="wakeLockOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webAnimations">
+        <h2>Web Animations</h2>
+        <p><small>Controls programmatic animations with precise timing. Perfect for complex animations, interactive effects, and dynamic UI transitions.</small></p>
+        <div
+          id="animationTarget"
+          style="width: 50px; height: 50px; background: #ff5722"
+        ></div>
+        <button id="startAnimation">Start Animation</button>
+        <button id="pauseAnimation">Pause</button>
+        <button id="reverseAnimation">Reverse</button>
+        <div class="demo-output" id="animationOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webAudio">
+        <h2>Web Audio</h2>
+        <p><small>Provides advanced audio processing capabilities. Essential for music applications, games, and professional audio tools.</small></p>
+        <button id="playSound">Play Test Sound</button>
+        <input
+          type="range"
+          id="volume"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.5"
+        />
+        <div class="demo-output" id="audioOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webAuthn">
+        <h2>Web Authentication</h2>
+        <p><small>Enables passwordless authentication using biometrics and security keys. Perfect for secure login systems and identity verification.</small></p>
+        <p>
+          <small
+            >If you're in development mode, open via localhost (not 127.0.0.1).
+            if production, use HTTPS.</small
+          >
+        </p>
+        <button id="register">Register</button>
+        <button id="authenticate">Authenticate</button>
+        <div class="demo-output" id="webAuthnOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webCrypto">
+        <h2>Web Crypto</h2>
+        <p><small>Performs cryptographic operations in the browser. Critical for data encryption, secure communication, and digital signatures.</small></p>
+        <input type="text" id="textToEncrypt" placeholder="Text to encrypt" />
+        <button id="encrypt">Encrypt</button>
+        <button id="decrypt">Decrypt</button>
+        <div class="demo-output" id="cryptoOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webHID">
+        <h2>Web HID</h2>
+        <p><small>Connects to Human Interface Devices like gamepads and special keyboards. Great for gaming, specialized input devices, and hardware control.</small></p>
+        <button id="requestHID">Request HID Device</button>
+        <select id="hidDevices" disabled>
+          <option>No devices available</option>
+        </select>
+        <div class="demo-output" id="hidOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webLocks">
+        <h2>Web Locks</h2>
+        <p><small>Coordinates access to resources across tabs and workers. Essential for preventing data races and maintaining data consistency.</small></p>
+        <button id="acquireLock">Acquire Lock</button>
+        <button id="releaseLock">Release Lock</button>
+        <div class="demo-output" id="lockOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webManifest">
+        <h2>Web Manifest</h2>
+        <p><small>Controls how the web app appears when installed. Key for creating Progressive Web Apps with native-like experience.</small></p>
+        <p>
+            <small></small>
+                The installation button should only work when the app meets the installation criteria (has a valid manifest, is served over HTTPS, etc.)
+            </small>
+        </p>
+        <button id="installPWA">Install App</button>
+        <div class="demo-output" id="manifestOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webMIDI">
+        <h2>Web MIDI</h2>
+        <p><small>Connects to MIDI musical devices and instruments. Perfect for music creation tools, learning apps, and digital instruments.</small></p>
+        <button id="requestMIDI">Request MIDI Access</button>
+        <select id="midiDevices" disabled>
+          <option>No devices available</option>
+        </select>
+        <div class="demo-output" id="midiOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webNFC">
+        <h2>Web NFC</h2>
+        <p><small>Enables reading and writing NFC tags. Useful for contactless interactions, smart packaging, and physical web experiences.</small></p>
+        <button id="startNFC">Start NFC Scan</button>
+        <button id="stopNFC">Stop Scan</button>
+        <div class="demo-output" id="nfcOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webOTP">
+        <h2>Web OTP</h2>
+        <p><small>Automatically retrieves SMS one-time passwords. Essential for seamless authentication and phone number verification.</small></p>
+        <input
+          type="text"
+          id="otpInput"
+          maxlength="6"
+          placeholder="Enter OTP"
+        />
+        <button id="requestOTP">Request OTP</button>
+        <div class="demo-output" id="otpOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webRTC"></div>
+        <h2>Web RTC</h2>
+        <p><small>Enables real-time peer-to-peer communication. Perfect for video chat, file sharing, and collaborative applications.</small></p>
+        <video
+          id="localVideo"
+          autoplay
+          playsinline
+          style="width: 300px"
+        ></video>
+        <button id="startWebRTC">Start Call</button>
+        <button id="endWebRTC">End Call</button>
+        <div class="demo-output" id="webRTCOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webShare">
+        <h2>Web Share</h2>
+        <p><small>Integrates with the device's native sharing system. Great for social sharing, content distribution, and cross-app interaction.</small></p>
+        <input type="text" id="shareText" placeholder="Text to share" />
+        <button id="share">Share</button>
+        <div class="demo-output" id="shareOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webSpeech">
+        <h2>Web Speech</h2>
+        <p><small>Provides speech synthesis and recognition capabilities. Essential for accessibility, voice commands, and audio content creation.</small></p>
+        <textarea id="speechText" placeholder="Text to speak"></textarea>
+        <select id="voiceSelect"></select>
+        <button id="speak">Speak</button>
+        <button id="stop">Stop</button>
+        <div class="demo-output" id="speechOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webTransport">
+        <h2>Web Transport</h2>
+        <p><small>Provides low-latency, bidirectional communication. Perfect for real-time gaming, live streaming, and high-performance data transfer.</small></p>
+        <button id="connect">Connect</button>
+        <input
+          type="text"
+          id="transportMessage"
+          placeholder="Message to send"
+        />
+        <button id="send">Send</button>
+        <div class="demo-output" id="transportOutput"></div>
+      </div>
+
+      <div class="demo-section" id="webUSB">
+        <h2>Web USB</h2>
+        <p><small>Enables communication with USB devices. Ideal for hardware integration, device configuration, and custom peripherals.</small></p>
+        <button id="requestUSB">Request USB Device</button>
+        <select id="usbDevices" disabled>
+          <option>No devices available</option>
+        </select>
+        <div class="demo-output" id="usbOutput"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      // Import all hooks alphabetically
+      import {
+        useLaunchHandler,
+        useLocalFontAccess,
+        useLocalStorage,
+        useMediaCapabilities,
+        useMediaRecorder,
+        useMediaSession,
+        useMediaStream,
+        useMessageChannel,
+        useNavigation,
+        useNetwork,
+        useNotifications,
+        usePageVisibility,
+        usePaymentRequest,
+        usePerformance,
+        usePermissions,
+        usePictureInPicture,
+        usePointerEvents,
+        usePointerLock,
+        usePopover,
+        usePresentationAPI,
+        usePushAPI,
+        useRealtime,
+        useReportingAPI,
+        useResizeObserver,
+        useResourceTiming,
+        useScheduler,
+        useScreenCapture,
+        useWakeLock,
+        useWebAnimations,
+        useWebAudio,
+        useWebAuthn,
+        useWebCrypto,
+        useWebHID,
+        useWebLocks,
+        useWebManifest,
+        useWebMIDI,
+        useWebNFC,
+        useWebOTP,
+        useWebRTC,
+        useWebShare,
+        useWebSpeech,
+        useWebTransport,
+        useWebUSB,
+      } from "../dist/browser-hooks.js";
+
+      // Launch Handler Demo
+      const launchHandler = useLaunchHandler();
+      const launchOutput = document.getElementById("launchOutput");
+
+      launchHandler.subscribe((state) => {
+        if (state.error) {
+          launchOutput.textContent = `Error: ${state.error.message}`;
+          return;
+        }
+        if (state.launchParams) {
+          launchOutput.textContent = `Launched with params: ${JSON.stringify(
+            state.launchParams
+          )}`;
+        }
+      });
+
+      document.getElementById("registerHandler").onclick = () => {
+        if (!launchHandler.state.isSupported) {
+          launchOutput.textContent =
+            "Launch Handler API not supported in this browser";
+          return;
+        }
+        launchOutput.textContent = "Waiting for launch events...";
+      };
+
+      // Local Font Access Demo
+      const fontAccess = useLocalFontAccess();
+      const fontSelect = document.getElementById("fontSelect");
+      const permissionStatus = document.getElementById("permissionStatus");
+      const fontDemo = document.getElementById("fontDemo");
+
+      // Subscribe to state changes to update permission status
+      fontAccess.subscribe((state) => {
+        if (state.error) {
+          permissionStatus.textContent = `Error: ${state.error.message}`;
+          return;
+        }
+        permissionStatus.textContent = state.permissionState || "unknown";
+      });
+
+      // Update font preview when font is selected
+      fontSelect.onchange = (e) => {
+        const selectedFont = e.target.value;
+        fontDemo.style.fontFamily = `"${selectedFont}", system-ui`;
+        document.getElementById(
+          "fontAccessOutput"
+        ).textContent = `Using font: ${selectedFont}`;
+      };
+
+      document.getElementById("queryLocalFonts").onclick = async () => {
+        try {
+          // First check current permission
+          const currentPermission = await fontAccess.checkPermission();
+          if (currentPermission !== "granted") {
+            document.getElementById("fontAccessOutput").textContent =
+              "Requesting permission...";
+          }
+
+          const fonts = await fontAccess.queryFonts();
+          fontSelect.innerHTML = [
+            '<option value="">Select a font...</option>',
+            ...fonts.map(
+              (font) => `<option value="${font.family}">${font.family}</option>`
+            ),
+          ].join("");
+          fontSelect.disabled = false;
+          document.getElementById(
+            "fontAccessOutput"
+          ).textContent = `Found ${fonts.length} fonts`;
+        } catch (error) {
+          document.getElementById(
+            "fontAccessOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Local Storage Demo
+      const initialStorageValue = null;
+      let currentStorageKey = "";
+      const storage = useLocalStorage(currentStorageKey, initialStorageValue);
+
+      document.getElementById("setStorage").onclick = () => {
+        const key = document.getElementById("storageKey").value.trim();
+        const value = document.getElementById("storageValue").value.trim();
+
+        if (!key) {
+          document.getElementById("storageOutput").textContent =
+            "Error: Key cannot be empty";
+          return;
+        }
+
+        const storageInstance = useLocalStorage(key, null);
+        storageInstance.setValue(value);
+        document.getElementById(
+          "storageOutput"
+        ).textContent = `Stored: ${key} = ${value}`;
+      };
+
+      document.getElementById("getStorage").onclick = () => {
+        const key = document.getElementById("storageKey").value.trim();
+
+        if (!key) {
+          document.getElementById("storageOutput").textContent =
+            "Error: Please enter a key to retrieve";
+          return;
+        }
+
+        const storageInstance = useLocalStorage(key, null);
+        const value = storageInstance.getValue();
+        document.getElementById("storageOutput").textContent = value
+          ? `${key} = ${value}`
+          : `Key "${key}" not found`;
+      };
+
+      // Media Capabilities Demo
+      const mediaCapabilities = useMediaCapabilities();
+      document.getElementById("checkVideoSupport").onclick = async () => {
+        const capabilities = await mediaCapabilities.checkDecodingCapabilities({
+          type: "file",
+          video: {
+            contentType: 'video/mp4; codecs="avc1.42E01E,mp4a.40.2"',
+            width: 1920,
+            height: 1080,
+            bitrate: 2000000,
+            framerate: 30,
+          },
+        });
+        document.getElementById(
+          "mediaCapabilitiesOutput"
+        ).textContent = `Video: Smooth playback - ${capabilities.smooth}, Power efficient - ${capabilities.powerEfficient}`;
+      };
+      document.getElementById("checkAudioSupport").onclick = async () => {
+        const capabilities = await mediaCapabilities.checkDecodingCapabilities({
+          type: "file",
+          audio: {
+            contentType: 'audio/mp4; codecs="mp4a.40.2"',
+            channels: 2,
+            bitrate: 128000,
+            samplerate: 44100,
+          },
+        });
+        document.getElementById(
+          "mediaCapabilitiesOutput"
+        ).textContent = `Audio: Smooth playback - ${capabilities.smooth}, Power efficient - ${capabilities.powerEfficient}`;
+      };
+
+      // Media Recorder Demo
+      const mediaRecorder = useMediaRecorder();
+      let recording = null;
+
+      document.getElementById("startRecording").onclick = async () => {
+        try {
+          recording = await mediaRecorder.start({ audio: true });
+          document.getElementById("recorderOutput").textContent =
+            "Recording...";
+        } catch (error) {
+          document.getElementById(
+            "recorderOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("stopRecording").onclick = async () => {
+        if (!recording) return;
+        try {
+          // Wait for stop operation to complete before accessing the blob
+          await mediaRecorder.stop();
+          const blob = mediaRecorder.getBlob();
+          const audio = document.getElementById("recordingPlayback");
+          audio.src = URL.createObjectURL(blob);
+          audio.style.display = "block";
+          document.getElementById("recorderOutput").textContent =
+            "Recording stopped";
+        } catch (error) {
+          document.getElementById(
+            "recorderOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Media Session Demo
+      const mediaSession = useMediaSession();
+      document.getElementById("updateMetadata").onclick = () => {
+        mediaSession.setMetadata({
+          title: "Demo Song",
+          artist: "Demo Artist",
+          album: "Demo Album",
+          artwork: [
+            {
+              src: "path/to/artwork.jpg",
+              sizes: "512x512",
+              type: "image/jpeg",
+            },
+          ],
+        });
+        document.getElementById("mediaSessionOutput").textContent =
+          "Media metadata updated";
+      };
+
+      // Media Stream Demo
+      const mediaStream = useMediaStream();
+      let currentStream = null;
+
+      document.getElementById("startStream").onclick = async () => {
+        try {
+          currentStream = await mediaStream.getStream({
+            video: true,
+            audio: true,
+          });
+          document.getElementById("streamPreview").srcObject = currentStream;
+          document.getElementById("streamOutput").textContent =
+            "Stream started";
+        } catch (error) {
+          document.getElementById(
+            "streamOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("stopStream").onclick = () => {
+        if (currentStream) {
+          mediaStream.stopStream(currentStream.id);
+          document.getElementById("streamPreview").srcObject = null;
+          currentStream = null;
+          document.getElementById("streamOutput").textContent =
+            "Stream stopped";
+        }
+      };
+
+      // Message Channel Demo
+      const messageChannel = useMessageChannel();
+      const { port1, port2 } = messageChannel.createChannel();
+
+      port1.onmessage = (e) => {
+        document.getElementById(
+          "port1Output"
+        ).innerHTML += `<div>Received: ${e.data}</div>`;
+      };
+
+      port2.onmessage = (e) => {
+        document.getElementById(
+          "port2Output"
+        ).innerHTML += `<div>Received: ${e.data}</div>`;
+      };
+
+      document.getElementById("sendPort1").onclick = () => {
+        const message = document.getElementById("port1Message").value;
+        port1.postMessage(message);
+      };
+
+      document.getElementById("sendPort2").onclick = () => {
+        const message = document.getElementById("port2Message").value;
+        port2.postMessage(message);
+      };
+
+      // Navigation Demo
+      const navigation = useNavigation();
+      document.getElementById("navigateDemo").onclick = async () => {
+        try {
+          await navigation.navigate("https://example.com");
+          document.getElementById("navigationOutput").textContent =
+            "Navigation started";
+        } catch (error) {
+          document.getElementById(
+            "navigationOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("navigateBack").onclick = async () => {
+        try {
+          if (navigation.state.canGoBack) {
+            await navigation.goBack();
+            document.getElementById("navigationOutput").textContent =
+              "Navigated back";
+          } else {
+            document.getElementById("navigationOutput").textContent =
+              "Cannot go back - no history";
+          }
+        } catch (error) {
+          document.getElementById(
+            "navigationOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("navigateForward").onclick = async () => {
+        try {
+          if (navigation.state.canGoForward) {
+            await navigation.goForward();
+            document.getElementById("navigationOutput").textContent =
+              "Navigated forward";
+          } else {
+            document.getElementById("navigationOutput").textContent =
+              "Cannot go forward - no forward history";
+          }
+        } catch (error) {
+          document.getElementById(
+            "navigationOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Network Demo
+      const network = useNetwork();
+      network.subscribe((status) => {
+        document.getElementById(
+          "networkOutput"
+        ).textContent = `Network status: ${
+          status.online ? "Online" : "Offline"
+        }`;
+      });
+
+      // Notifications Demo
+      const notifications = useNotifications();
+      document.getElementById("requestNotification").onclick = async () => {
+        try {
+          await notifications.requestPermission();
+          document.getElementById("notificationOutput").textContent =
+            "Permission granted";
+        } catch (error) {
+          document.getElementById(
+            "notificationOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+      document.getElementById("showNotification").onclick = () => {
+        notifications.show("Demo Notification", {
+          body: "This is a demo notification",
+          icon: "path/to/icon.png",
+        });
+      };
+
+      // Page Visibility Demo
+      const pageVisibility = usePageVisibility();
+      pageVisibility.subscribe((state) => {
+        document.getElementById("visibilityOutput").textContent = `Page is ${
+          state.hidden ? "hidden" : "visible"
+        }`;
+      });
+
+      // Payment Request Demo
+      const paymentRequest = usePaymentRequest();
+      document.getElementById("requestPayment").onclick = async () => {
+        try {
+          const paymentMethods = [
+            {
+              supportedMethods: "basic-card",
+              data: {
+                supportedNetworks: ["visa", "mastercard"],
+                supportedTypes: ["credit", "debit"],
+              },
+            },
+          ];
+
+          const paymentDetails = {
+            total: {
+              label: "Total",
+              amount: {
+                currency: "USD",
+                value: "19.99",
+              },
+            },
+          };
+
+          const request = paymentRequest.createPaymentRequest({
+            methods: paymentMethods,
+            details: paymentDetails,
+          });
+
+          const canPay = await paymentRequest.canMakePayment(request);
+          if (!canPay) {
+            document.getElementById("paymentOutput").textContent =
+              "Payment method not available";
+            return;
+          }
+
+          const response = await paymentRequest.show(request);
+          await response.complete("success");
+          document.getElementById("paymentOutput").textContent =
+            "Payment successful!";
+        } catch (error) {
+          document.getElementById(
+            "paymentOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Pointer Events Demo
+      const pointerEvents = usePointerEvents({ target: pointerArea });
+      const pointerDot = document.getElementById("pointerDot");
+
+      pointerEvents.subscribe((state) => {
+        if (state.primaryPointer) {
+          const rect = pointerArea.getBoundingClientRect();
+          const x = state.primaryPointer.clientX - rect.left;
+          const y = state.primaryPointer.clientY - rect.top;
+          pointerDot.style.left = `${x}px`;
+          pointerDot.style.top = `${y}px`;
+          document.getElementById(
+            "pointerEventsOutput"
+          ).textContent = `Position: ${Math.round(x)}, ${Math.round(y)}`;
+        }
+      });
+
+      // Pointer Lock Demo
+      const pointerLock = usePointerLock();
+      const lockTarget = document.getElementById("lockTarget");
+      let isLocked = false;
+
+      lockTarget.onclick = async () => {
+        if (!isLocked) {
+          await pointerLock.requestLock(lockTarget);
+          isLocked = true;
+          lockTarget.textContent = "Press Esc to exit";
+          document.getElementById("pointerLockOutput").textContent =
+            "Pointer locked";
+        }
+      };
+
+      document.addEventListener("pointerlockchange", () => {
+        if (!document.pointerLockElement) {
+          isLocked = false;
+          lockTarget.textContent = "Click to lock pointer";
+          document.getElementById("pointerLockOutput").textContent =
+            "Pointer unlocked";
+        }
+      });
+
+      // Popover Demo
+      const popover = usePopover();
+      document.getElementById("showPopover").onclick = () => {
+        const popoverElement = document.getElementById("demoPopover");
+        popover.showPopover(popoverElement);
+      };
+      document.getElementById("closePopover").onclick = () => {
+        const popoverElement = document.getElementById("demoPopover");
+        popover.hidePopover(popoverElement);
+      };
+
+      // Presentation API Demo
+      const presentation = usePresentationAPI();
+
+      // Subscribe to availability changes
+      presentation.subscribe((state) => {
+        const output = document.getElementById("presentationOutput");
+        if (!state.isSupported) {
+          output.textContent =
+            "Presentation API is not supported in this browser";
+          return;
+        }
+        if (state.availability) {
+          output.textContent = "Ready to present (secondary display detected)";
+        } else {
+          output.textContent = "No secondary display available";
+        }
+      });
+
+      document.getElementById("startPresentation").onclick = async () => {
+        try {
+          // First check if we're in a secure context
+          if (!window.isSecureContext) {
+            document.getElementById("presentationOutput").textContent =
+              "Presentation API requires HTTPS or localhost";
+            return;
+          }
+
+          // Check if API is supported
+          if (!presentation.state.isSupported) {
+            document.getElementById("presentationOutput").textContent =
+              "Presentation API is not supported in this browser";
+            return;
+          }
+
+          // Check display availability
+          if (!presentation.state.availability) {
+            document.getElementById("presentationOutput").textContent =
+              "No secondary display available. Connect a TV or monitor first.";
+            return;
+          }
+
+          // Use the dedicated receiver page
+          const receiverUrl = new URL(
+            "presentation-receiver.html",
+            window.location.href
+          ).toString();
+
+          await presentation.startPresentation([receiverUrl], {
+            onConnectionAvailable: () => {
+              document.getElementById("presentationOutput").textContent =
+                "Presentation connected";
+            },
+            onConnectionClose: () => {
+              document.getElementById("presentationOutput").textContent =
+                "Presentation disconnected";
+            },
+          });
+        } catch (error) {
+          document.getElementById(
+            "presentationOutput"
+          ).textContent = `Error: ${error.message}`;
+          console.error("Presentation error:", error);
+        }
+      };
+
+      document.getElementById("stopPresentation").onclick = () => {
+        if (presentation.state.connection) {
+          presentation.closeConnection();
+          document.getElementById("presentationOutput").textContent =
+            "Presentation stopped";
+        } else {
+          document.getElementById("presentationOutput").textContent =
+            "No active presentation to stop";
+        }
+      };
+
+      // Push API Demo
+      const push = usePushAPI();
+      document.getElementById("subscribePush").onclick = async () => {
+        try {
+          // First register service worker if not already registered
+          if (!navigator.serviceWorker.controller) {
+            await navigator.serviceWorker.register("./service-worker.js");
+          }
+
+          // Get the push API instance first
+          const pushAPI = await push;
+
+          // Request notification permission if needed
+          const permission = await pushAPI.requestPermission();
+          if (permission !== "granted") {
+            throw new Error("Notification permission denied");
+          }
+
+          // Subscribe to push notifications
+          const subscription = await pushAPI.subscribe({
+            userVisibleOnly: true,
+            // Replace with your VAPID public key
+            applicationServerKey: "YOUR_VAPID_PUBLIC_KEY",
+          });
+
+          document.getElementById("pushOutput").textContent =
+            "Subscribed to push notifications";
+        } catch (error) {
+          document.getElementById(
+            "pushOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("unsubscribePush").onclick = async () => {
+        try {
+          const pushAPI = await push;
+          await pushAPI.unsubscribe();
+          document.getElementById("pushOutput").textContent =
+            "Unsubscribed from push notifications";
+        } catch (error) {
+          document.getElementById(
+            "pushOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Realtime API Demo
+      const realtime = useRealtime();
+      let peerConnectionRealtimeAPI = null;
+      let realtimeChannel = null;
+
+      document.getElementById("connectRealtime").onclick = async () => {
+        try {
+          if (!realtime.state.isSupported) {
+            throw new Error("WebRTC is not supported");
+          }
+
+          peerConnectionRealtimeAPI = await realtime.createConnection({
+            configuration: {
+              iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+            },
+            onConnect: () => {
+              document.getElementById("realtimeOutput").textContent =
+                "Connected";
+            },
+            onDisconnect: () => {
+              document.getElementById("realtimeOutput").textContent =
+                "Disconnected";
+            },
+            onError: (error) => {
+              document.getElementById(
+                "realtimeOutput"
+              ).textContent = `Error: ${error.message}`;
+            },
+          });
+
+          realtimeChannel = await realtime.createDataChannel("demo", {
+            onMessage: (data) => {
+              document.getElementById(
+                "realtimeOutput"
+              ).textContent = `Received: ${data}`;
+            },
+          });
+
+          document.getElementById("realtimeOutput").textContent =
+            "Initializing connection...";
+        } catch (error) {
+          document.getElementById(
+            "realtimeOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("disconnectRealtime").onclick = () => {
+        if (peerConnectionRealtimeAPI) {
+          realtime.closeConnection();
+          peerConnectionRealtimeAPI = null;
+          realtimeChannel = null;
+          document.getElementById("realtimeOutput").textContent =
+            "Disconnected";
+        }
+      };
+
+      document.getElementById("sendRealtimeMessage").onclick = () => {
+        if (!realtimeChannel) {
+          document.getElementById("realtimeOutput").textContent =
+            "Please connect first";
+          return;
+        }
+
+        const message = document.getElementById("realtimeMessage").value;
+        if (!message) {
+          document.getElementById("realtimeOutput").textContent =
+            "Please enter a message";
+          return;
+        }
+
+        try {
+          realtime.sendMessage("demo", message);
+          document.getElementById("realtimeMessage").value = ""; // Clear input after sending
+          document.getElementById(
+            "realtimeOutput"
+          ).textContent = `Sent: ${message}`;
+        } catch (error) {
+          document.getElementById(
+            "realtimeOutput"
+          ).textContent = `Error sending: ${error.message}`;
+        }
+      };
+
+      // Reporting API Demo
+      const reporting = useReportingAPI();
+
+      // Check if API is supported
+      if (!reporting.state.isSupported) {
+        document.getElementById("reportingOutput").textContent =
+          "Reporting API tidak didukung di browser ini";
+      } else {
+        // Start observing reports when the demo section is initialized
+        reporting.observe({
+          types: ["deprecation", "intervention", "crash", "csp-violation"],
+          buffered: true, // Get any existing reports
+          onReport: (reports) => {
+            const reportDetails = reports
+              .map((r) => `${r.type}: ${r.body.message || "No message"}`)
+              .join("\n");
+
+            document.getElementById(
+              "reportingOutput"
+            ).textContent = `Received ${reports.length} report(s):\n${reportDetails}`;
+          },
+        });
+      }
+
+      document.getElementById("generateReport").onclick = () => {
+        if (!reporting.state.isSupported) {
+          document.getElementById("reportingOutput").textContent =
+            "Reporting API tidak didukung";
+          return;
+        }
+
+        // Trigger multiple deprecation warnings
+        document.execCommand("copy");
+        document.execCommand("paste");
+        document.getElementById("reportingOutput").textContent =
+          "Menunggu reports... (harap tunggu beberapa detik)";
+
+        // Check for reports after a short delay
+        setTimeout(() => {
+          const reports = reporting.getReports();
+          if (reports.length === 0) {
+            document.getElementById("reportingOutput").textContent =
+              "Tidak ada report yang diterima";
+          }
+        }, 1000);
+      };
+
+      document.getElementById("triggerError").onclick = () => {
+        if (!reporting.state.isSupported) {
+          document.getElementById("reportingOutput").textContent =
+            "Reporting API tidak didukung";
+          return;
+        }
+
+        // Clear existing reports
+        reporting.clearReports();
+
+        // Trigger various types of errors
+        try {
+          // 1. Trigger an uncaught error
+          setTimeout(() => {
+            throw new Error("Uncaught demo error");
+          }, 0);
+
+          // 2. Trigger an unhandled rejection
+          Promise.reject(new Error("Unhandled rejection demo"));
+
+          // 3. Trigger a reference error
+          setTimeout(() => {
+            nonExistentFunction();
+          }, 100);
+
+          document.getElementById("reportingOutput").textContent =
+            "Memicu error... (harap tunggu 3-5 detik)";
+
+          // Check for reports after errors should have been triggered
+          setTimeout(() => {
+            const reports = reporting.getReports();
+            if (reports.length === 0) {
+              document.getElementById("reportingOutput").textContent =
+                "Tidak ada report yang diterima. Pastikan browser mendukung Reporting API";
+            } else {
+              const reportDetails = reports
+                .map((r) => `${r.type}: ${r.body?.message || "No message"}`)
+                .join("\n");
+              document.getElementById(
+                "reportingOutput"
+              ).textContent = `Menerima ${reports.length} report:\n${reportDetails}`;
+            }
+          }, 3000);
+        } catch (error) {
+          console.error("Demo error:", error);
+        }
+
+        // Set up error event listeners
+        window.addEventListener(
+          "error",
+          (event) => {
+            console.log("Error event:", event);
+          },
+          { once: true }
+        );
+
+        window.addEventListener(
+          "unhandledrejection",
+          (event) => {
+            console.log("Unhandled rejection:", event);
+          },
+          { once: true }
+        );
+      };
+
+      // Resize Observer Demo
+      const resizeObserver = useResizeObserver();
+      const resizeTarget = document.getElementById("resizeTarget");
+
+      resizeObserver.observe(resizeTarget, {
+        onResize: (entries) => {
+          const entry = entries[0];
+          const { width, height } = entry.contentRect;
+          document.getElementById(
+            "resizeOutput"
+          ).textContent = `Size: ${Math.round(width)}x${Math.round(height)}`;
+        },
+      });
+
+      // Resource Timing Demo
+      const resourceTiming = useResourceTiming();
+      document.getElementById("measureResource").onclick = async () => {
+        try {
+          // Start observing resource timing
+          resourceTiming.observe({
+            onResourceTiming: (entry) => {
+              const metrics = resourceTiming.getMetrics(entry);
+              document.getElementById(
+                "resourceTimingOutput"
+              ).textContent = `Duration: ${metrics.duration.toFixed(
+                2
+              )}ms, TTFB: ${metrics.ttfb.toFixed(2)}ms`;
+            },
+          });
+
+          // Trigger a resource load to measure
+          await fetch("https://example.com/resource");
+        } catch (error) {
+          document.getElementById(
+            "resourceTimingOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("clearResourceTimings").onclick = () => {
+        resourceTiming.clearEntries();
+        document.getElementById("resourceTimingOutput").textContent =
+          "Resource timings cleared";
+      };
+
+      // Scheduler Demo
+      const scheduler = useScheduler();
+      let currentTaskId = null;
+
+      document.getElementById("scheduleTask").onclick = async () => {
+        // Generate unique task ID
+        currentTaskId = "demo-task-" + Date.now();
+
+        try {
+          document.getElementById("schedulerOutput").textContent =
+            "Scheduling task...";
+
+          await scheduler.postTask(
+            () => {
+              document.getElementById("schedulerOutput").textContent =
+                "Task executed";
+            },
+            {
+              id: currentTaskId,
+              priority: "user-visible",
+              delay: 2000,
+            }
+          );
+
+          // Don't overwrite the "Task executed" message that was set by the callback
+          if (
+            document.getElementById("schedulerOutput").textContent ===
+            "Scheduling task..."
+          ) {
+            document.getElementById("schedulerOutput").textContent =
+              "Task scheduled";
+          }
+        } catch (error) {
+          if (error.name === "AbortError") {
+            document.getElementById("schedulerOutput").textContent =
+              "Task cancelled";
+          } else {
+            document.getElementById(
+              "schedulerOutput"
+            ).textContent = `Error: ${error.message}`;
+          }
+          currentTaskId = null;
+        }
+      };
+
+      document.getElementById("cancelTask").onclick = () => {
+        if (currentTaskId) {
+          scheduler.cancelTask(currentTaskId);
+          document.getElementById("schedulerOutput").textContent =
+            "Task cancelled";
+          currentTaskId = null;
+        }
+      };
+
+      // Screen Capture Demo
+      const screenCapture = useScreenCapture();
+      let captureStream = null;
+
+      document.getElementById("startScreenCapture").onclick = async () => {
+        try {
+          captureStream = await screenCapture.startCapture();
+          if (captureStream) {
+            document.getElementById("screenPreview").srcObject = captureStream;
+            document.getElementById("screenCaptureOutput").textContent =
+              "Screen capture started";
+          }
+        } catch (error) {
+          document.getElementById(
+            "screenCaptureOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("stopScreenCapture").onclick = () => {
+        if (captureStream) {
+          screenCapture.stopCapture(captureStream);
+          document.getElementById("screenPreview").srcObject = null;
+          captureStream = null;
+          document.getElementById("screenCaptureOutput").textContent =
+            "Screen capture stopped";
+        }
+      };
+
+      // Wake Lock Demo
+      const wakeLock = useWakeLock();
+      let wakeLockActive = false;
+
+      document.getElementById("requestWakeLock").onclick = async () => {
+        try {
+          if (!wakeLockActive) {
+            await wakeLock.requestLock();
+            wakeLockActive = true;
+            document.getElementById("wakeLockOutput").textContent =
+              "Wake lock active";
+          } else {
+            await wakeLock.releaseLock();
+            wakeLockActive = false;
+            document.getElementById("wakeLockOutput").textContent =
+              "Wake lock released";
+          }
+        } catch (error) {
+          document.getElementById(
+            "wakeLockOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web Animations Demo
+      const webAnimations = useWebAnimations();
+      const animationTarget = document.getElementById("animationTarget");
+      let animation = null;
+
+      document.getElementById("startAnimation").onclick = () => {
+        const result = webAnimations.animate(
+          animationTarget,
+          [
+            { transform: "translateX(0) rotate(0deg)" },
+            { transform: "translateX(200px) rotate(360deg)" },
+          ],
+          {
+            duration: 2000,
+            iterations: Infinity,
+          }
+        );
+        animation = result.animation;
+        document.getElementById("animationOutput").textContent =
+          "Animation started";
+      };
+
+      document.getElementById("pauseAnimation").onclick = () => {
+        if (animation) {
+          animation.pause();
+          document.getElementById("animationOutput").textContent =
+            "Animation paused";
+        }
+      };
+
+      document.getElementById("reverseAnimation").onclick = () => {
+        if (animation) {
+          animation.reverse();
+          document.getElementById("animationOutput").textContent =
+            "Animation reversed";
+        }
+      };
+
+      // Web Audio Demo
+      const webAudio = useWebAudio();
+      let audioContext = null;
+      let oscillator = null;
+      let gainNode = null;
+
+      document.getElementById("playSound").onclick = () => {
+        if (!audioContext) {
+          audioContext = webAudio.createContext();
+          oscillator = webAudio.createOscillator("sine", 440);
+          gainNode = webAudio.createGain(0.5); // Initial volume at 0.5
+
+          // Connect oscillator -> gain -> destination
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.start();
+          document.getElementById("audioOutput").textContent = "Sound playing";
+        } else {
+          oscillator.stop();
+          audioContext = null;
+          oscillator = null;
+          gainNode = null;
+          document.getElementById("audioOutput").textContent = "Sound stopped";
+        }
+      };
+
+      document.getElementById("volume").oninput = (e) => {
+        if (gainNode) {
+          gainNode.gain.setValueAtTime(
+            parseFloat(e.target.value),
+            audioContext.currentTime
+          );
+        }
+      };
+
+      // Web Authentication Demo
+      const webAuthn = useWebAuthn();
+      document.getElementById("register").onclick = async () => {
+        try {
+          const createCredentialOptions = {
+            publicKey: {
+              challenge: window.crypto.getRandomValues(new Uint8Array(32)),
+              rp: {
+                name: "Local Development",
+                // Note: rpId is handled automatically by the hook
+              },
+              user: {
+                id: window.crypto.getRandomValues(new Uint8Array(32)),
+                name: "demo-user",
+                displayName: "Demo User",
+              },
+              pubKeyCredParams: [
+                { type: "public-key", alg: -7 }, // ES256
+                { type: "public-key", alg: -257 }, // RS256
+              ],
+              timeout: 60000,
+              attestation: "none",
+              authenticatorSelection: {
+                authenticatorAttachment: "platform",
+                requireResidentKey: false,
+                userVerification: "preferred",
+              },
+            },
+          };
+          await webAuthn.createCredential(createCredentialOptions);
+          document.getElementById("webAuthnOutput").textContent =
+            "Registration successful";
+        } catch (error) {
+          document.getElementById(
+            "webAuthnOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("authenticate").onclick = async () => {
+        try {
+          const getCredentialOptions = {
+            publicKey: {
+              challenge: window.crypto.getRandomValues(new Uint8Array(32)),
+              timeout: 60000,
+              userVerification: "preferred",
+              // Note: rpId is handled automatically by the hook
+            },
+          };
+          const result = await webAuthn.getCredential(getCredentialOptions);
+          document.getElementById("webAuthnOutput").textContent =
+            "Authentication successful";
+        } catch (error) {
+          document.getElementById(
+            "webAuthnOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web Crypto Demo
+      const webCrypto = useWebCrypto();
+      let encryptedData = null;
+      let key = null;
+      let iv = null;
+
+      document.getElementById("encrypt").onclick = async () => {
+        try {
+          const text = document.getElementById("textToEncrypt").value;
+          // Using the simplified encrypt API
+          const result = await webCrypto.simpleEncrypt(text);
+          encryptedData = result.encrypted;
+          key = result.key;
+          iv = result.iv;
+
+        // Advance usage with custom algorithms and parameters
+        // const key = await webCrypto.generateKey({
+        //   algorithm: customAlgorithm,
+        //   extractable: true,
+        //   keyUsages: ["encrypt", "decrypt"],
+        // });
+        // const encrypted = await webCrypto.encrypt(customParams, key, data);
+
+          document.getElementById(
+            "cryptoOutput"
+          ).textContent = `Encrypted successfully! (length: ${encryptedData.byteLength} bytes)`;
+        } catch (error) {
+          document.getElementById(
+            "cryptoOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("decrypt").onclick = async () => {
+        if (encryptedData && key && iv) {
+          try {
+            // Using the simplified decrypt API
+            const decryptedText = await webCrypto.simpleDecrypt(
+              encryptedData,
+              key,
+              iv
+            );
+            
+            document.getElementById(
+              "cryptoOutput"
+            ).textContent = `Decrypted: ${decryptedText}`;
+          } catch (error) {
+            document.getElementById(
+              "cryptoOutput"
+            ).textContent = `Error: ${error.message}`;
+          }
+        } else {
+          document.getElementById("cryptoOutput").textContent =
+            "No encrypted data available. Encrypt something first.";
+        }
+      };
+
+      // Web HID Demo
+      const webHID = useWebHID();
+      document.getElementById("requestHID").onclick = async () => {
+        try {
+          const devices = await webHID.requestDevice({
+            filters: [], // Accept any HID device for demo
+          });
+          const select = document.getElementById("hidDevices");
+          select.innerHTML = devices
+            .map(
+              (d) => `<option value="${d.deviceId}">${d.productName}</option>`
+            )
+            .join("");
+          select.disabled = false;
+          document.getElementById(
+            "hidOutput"
+          ).textContent = `Found ${devices.length} devices`;
+        } catch (error) {
+          document.getElementById(
+            "hidOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web Locks Demo
+      const webLocks = useWebLocks();
+      let lockName = 'demo-lock';
+
+      document.getElementById("acquireLock").onclick = async () => {
+        try {
+          await webLocks.requestLock(
+            lockName,
+            async (lock) => {
+              document.getElementById("lockOutput").textContent = "Lock acquired";
+              // Keep the lock for 5 seconds for demo purposes
+              await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+          );
+        } catch (error) {
+          document.getElementById("lockOutput").textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("releaseLock").onclick = async () => {
+        try {
+          const locks = await webLocks.getLocks();
+          if (locks.some(lock => lock.name === lockName)) {
+            document.getElementById("lockOutput").textContent = "Lock is held and will be released after its operation completes";
+          } else {
+            document.getElementById("lockOutput").textContent = "No lock is currently held";
+          }
+        } catch (error) {
+          document.getElementById("lockOutput").textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web Manifest Demo
+      const webManifest = useWebManifest();
+      let deferredInstallPrompt = null;
+
+      // Save the beforeinstallprompt event for later use
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        document.getElementById("installPWA").disabled = false;
+        document.getElementById("manifestOutput").textContent = "App is installable";
+      });
+
+      // Listen for successful installs
+      window.addEventListener('appinstalled', () => {
+        document.getElementById("manifestOutput").textContent = "App was installed successfully";
+        deferredInstallPrompt = null;
+        document.getElementById("installPWA").disabled = true;
+      });
+
+      // Initialize button state
+      document.getElementById("installPWA").disabled = true;
+
+      document.getElementById("installPWA").onclick = async () => {
+        if (!deferredInstallPrompt) {
+          document.getElementById("manifestOutput").textContent = 
+            "App installation not available - The app may already be installed, or installation criteria not met";
+          return;
+        }
+
+        try {
+          await webManifest.promptInstall();
+          document.getElementById("manifestOutput").textContent = "Installation prompt shown";
+        } catch (error) {
+          document.getElementById(
+            "manifestOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web MIDI Demo
+      const webMIDI = useWebMIDI();
+      document.getElementById("requestMIDI").onclick = async () => {
+        try {
+          const access = await webMIDI.requestAccess();
+          const inputs = webMIDI.getInputs();
+          const outputs = webMIDI.getOutputs();
+          const devices = [...inputs, ...outputs];
+          
+          const select = document.getElementById("midiDevices");
+          select.innerHTML = devices
+            .map((d) => `<option value="${d.id}">${d.name}</option>`)
+            .join("");
+          select.disabled = false;
+          document.getElementById(
+            "midiOutput"
+          ).textContent = `Found ${devices.length} MIDI devices (${inputs.length} inputs, ${outputs.length} outputs)`;
+        } catch (error) {
+          document.getElementById(
+            "midiOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web NFC Demo
+      const webNFC = useWebNFC();
+      let scanning = false;
+
+      // Subscribe to NFC state changes
+      webNFC.subscribe((state) => {
+        const output = document.getElementById("nfcOutput");
+        if (!state.isSupported) {
+          output.textContent = "Web NFC API is not supported in this browser";
+          return;
+        }
+        if (state.error) {
+          output.textContent = `Error: ${state.error.message}`;
+          return;
+        }
+        if (state.lastReading) {
+          output.textContent = `Read NFC tag: ${JSON.stringify(state.lastReading)}`;
+        }
+      });
+
+      document.getElementById("startNFC").onclick = async () => {
+        try {
+          if (!webNFC.state.isSupported) {
+            document.getElementById("nfcOutput").textContent = "Web NFC API is not supported in this browser";
+            return;
+          }
+
+          await webNFC.scan();
+          scanning = true;
+          document.getElementById("nfcOutput").textContent = "NFC scanning started. Bring an NFC tag close to your device.";
+        } catch (error) {
+          document.getElementById("nfcOutput").textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("stopNFC").onclick = () => {
+        if (scanning) {
+          webNFC.cleanup();
+          scanning = false;
+          document.getElementById("nfcOutput").textContent = "NFC scanning stopped";
+        }
+      };
+
+      // Web OTP Demo
+      const webOTP = useWebOTP();
+      document.getElementById("requestOTP").onclick = async () => {
+        try {
+          if (!webOTP.state.isSupported) {
+            document.getElementById("otpOutput").textContent = "WebOTP API is not supported in this browser";
+            document.getElementById("otpInput").disabled = true;
+            document.getElementById("requestOTP").disabled = true;
+            return;
+          }
+          
+          const otp = await webOTP.receive();
+          document.getElementById("otpInput").value = otp;
+          document.getElementById("otpOutput").textContent = "OTP received";
+        } catch (error) {
+          document.getElementById(
+            "otpOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web RTC Demo
+      const webRTC = useWebRTC();
+      let peerConnection = null;
+
+      document.getElementById("startWebRTC").onclick = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true,
+          });
+          document.getElementById("localVideo").srcObject = stream;
+          peerConnection = await webRTC.createPeerConnection();
+          document.getElementById("webRTCOutput").textContent = "Call started";
+        } catch (error) {
+          document.getElementById(
+            "webRTCOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("endWebRTC").onclick = () => {
+        if (peerConnection) {
+          webRTC.close();
+          document.getElementById("localVideo").srcObject = null;
+          peerConnection = null;
+          document.getElementById("webRTCOutput").textContent = "Call ended";
+        }
+      };
+
+      // Web Share Demo
+      const webShare = useWebShare();
+      document.getElementById("share").onclick = async () => {
+        try {
+          const text = document.getElementById("shareText").value;
+          await webShare.share({ text });
+          document.getElementById("shareOutput").textContent = "Content shared";
+        } catch (error) {
+          document.getElementById(
+            "shareOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web Speech Demo
+      const webSpeech = useWebSpeech();
+      const voiceSelect = document.getElementById("voiceSelect");
+
+      webSpeech.subscribe((state) => {
+        if (state.voices.length > 0) {
+          voiceSelect.innerHTML = state.voices
+            .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+            .join("");
+        }
+      });
+
+      document.getElementById("speak").onclick = () => {
+        const text = document.getElementById("speechText").value;
+        if (!text) {
+          document.getElementById("speechOutput").textContent = "Please enter text to speak";
+          return;
+        }
+
+        const selectedVoiceName = voiceSelect.value;
+        const selectedVoice = webSpeech.state.voices.find(v => v.name === selectedVoiceName);
+
+        webSpeech.speak(text, {
+          voice: selectedVoice,
+          lang: "id-ID",
+          rate: 1.0,
+          pitch: 1.0,
+          volume: 1.0
+        });
+        document.getElementById("speechOutput").textContent = "Speaking...";
+      };
+
+      document.getElementById("stop").onclick = () => {
+        webSpeech.stopSpeaking();
+        document.getElementById("speechOutput").textContent = "Stopped speaking";
+      };
+
+      // Web Transport Demo
+      const webTransport = useWebTransport();
+      let transportConnection = null;
+
+      document.getElementById("connect").onclick = async () => {
+        try {
+          transportConnection = await webTransport.connect(
+            "https://example.com:4433"
+          );
+          document.getElementById("transportOutput").textContent = "Connected";
+        } catch (error) {
+          document.getElementById(
+            "transportOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      document.getElementById("send").onclick = async () => {
+        if (!transportConnection) return;
+        try {
+          const message = document.getElementById("transportMessage").value;
+          await webTransport.send(transportConnection, message);
+          document.getElementById("transportOutput").textContent =
+            "Message sent";
+        } catch (error) {
+          document.getElementById(
+            "transportOutput"
+          ).textContent = `Error: ${error.message}`;
+        }
+      };
+
+      // Web USB Demo
+      const webUSB = useWebUSB();
+      document.getElementById("requestUSB").onclick = async () => {
+        try {
+          const device = await webUSB.requestDevice({
+            filters: [] // Accept any USB device for demo
+          });
+          
+          // Since requestDevice returns a single device, wrap it in an array if it exists
+          const devices = device ? [device] : [];
+          
+          const select = document.getElementById("usbDevices");
+          select.innerHTML = devices
+            .map(d => `<option value="${d.deviceId}">${d.productName || 'Unknown Device'}</option>`)
+            .join("");
+          select.disabled = false;
+          document.getElementById("usbOutput").textContent = 
+            `Found ${devices.length} USB device${devices.length !== 1 ? 's' : ''}`;
+        } catch (error) {
+          document.getElementById("usbOutput").textContent = `Error: ${error.message}`;
+        }
+      };
+    </script>
+  </body>
+</html>

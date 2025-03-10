@@ -1,0 +1,3 @@
+.progress
+dist/*
+node_modules

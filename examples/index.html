@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Hooks Examples (A-Z)</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+
+        /* Add CSS style for custom highlight */
+        ::highlight(demo-highlight) {
+            background-color: yellow;
+            color: black;
+        }
+
+        .demo-output {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            min-height: 24px;
+            font-family: monospace;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 4px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background: #f0f0f0;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .online { background: green; }
+        .offline { background: red; }
+        input, select, textarea {
+            padding: 8px;
+            margin: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        h1 { margin-bottom: 30px; }
+        h2 { margin-top: 0; }
+
+        /* Add styles for the search highlight */
+        ::highlight(search-results) {
+            background-color: yellow;
+            color: black;
+        }
+
+        #searchQuery {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Browser Hooks Examples (A-Z)</h1>
+    <div id="demo-container">
+        <!-- A -->
+        
+        <!-- B -->
+        <div class="demo-section" id="backgroundSync">
+            <h2>Background Sync</h2>
+            <p><small>Enables web apps to defer network requests until the user has stable connectivity. Useful for ensuring data is sent even when offline, like messaging apps or social media posts.</small></p>
+            <button id="registerSync">Register Sync</button>
+            <div class="demo-output" id="backgroundSyncOutput">Status: Not registered</div>
+        </div>
+
+        <div class="demo-section" id="backgroundTask">
+            <h2>Background Task</h2>
+            <p><small>Schedules and runs tasks in the background when the browser is idle. Perfect for non-urgent tasks like analytics, caching, or cleanup operations that shouldn't impact user experience.</small></p>
+            <button id="startTask">Start Task</button>
+            <button id="stopTask">Stop Task</button>
+            <div class="demo-output" id="backgroundTaskOutput">Status: Idle</div>
+        </div>
+
+        <div class="demo-section" id="badge">
+            <h2>Badge</h2>
+            <p><small>Displays notification badges on app icons or tabs. Commonly used in PWAs for unread messages, notifications, or updates count indication.</small></p>
+            <button id="setBadge">Set Badge</button>
+            <button id="clearBadge">Clear Badge</button>
+            <input type="number" id="badgeCount" value="1" min="0">
+            <div class="demo-output" id="badgeOutput">Current badge: None</div>
+        </div>
+
+        <div class="demo-section" id="beacon">
+            <h2>Beacon</h2>
+            <p><small>Sends data to a server reliably before page unload. Ideal for analytics or logging that needs to work even when users quickly navigate away.</small></p>
+            <button id="sendBeacon">Send Beacon</button>
+            <div class="demo-output" id="beaconOutput">Status: Ready</div>
+        </div>
+
+        <div class="demo-section" id="broadcastChannel">
+            <h2>Broadcast Channel</h2>
+            <p><small>Enables communication between different windows/tabs of the same origin. Perfect for syncing state across multiple instances of your app, like theme changes or logout actions.</small></p>
+            <small>Open this page in a new tab to test broadcast messaging</small><br/>
+            <input type="text" id="broadcastMessage" placeholder="Message to broadcast">
+            <button id="sendBroadcast">Send</button>
+            <div class="demo-output" id="broadcastOutput"></div>
+        </div>
+
+        <!-- C -->
+        <div class="demo-section" id="canvas">
+            <h2>Canvas</h2>
+            <p><small>Provides a drawing surface for 2D graphics. Used for creating charts, graphs, image manipulation, games, and other visual content dynamically.</small></p>
+            <canvas id="demoCanvas" width="300" height="200" style="border:1px solid #ddd;"></canvas>
+            <br>
+            <button id="drawOnCanvas">Draw Something</button>
+            <button id="clearCanvas">Clear</button>
+        </div>
+
+        <div class="demo-section" id="clipboard">
+            <h2>Clipboard</h2>
+            <p><small>Interacts with the system clipboard for copy/paste operations. Essential for text editors, form filling, and content sharing features.</small></p>
+            <input type="text" id="clipboardText" placeholder="Text to copy">
+            <button id="copyToClipboard">Copy</button>
+            <button id="pasteFromClipboard">Paste</button>
+            <div class="demo-output" id="clipboardOutput"></div>
+        </div>
+
+        <div class="demo-section" id="compressionStream">
+            <h2>Compression Stream</h2>
+            <p><small>Compresses and decompresses data streams. Useful for reducing data transfer size or storing large amounts of data efficiently.</small></p>
+            <textarea id="textToCompress" placeholder="Enter text to compress" rows="4"></textarea>
+            <br>
+            <button id="compressText">Compress</button>
+            <button id="decompressText">Decompress</button>
+            <div class="demo-output" id="compressionOutput"></div>
+        </div>
+
+        <div class="demo-section" id="console">
+            <h2>Console</h2>
+            <p><small>Provides advanced logging capabilities beyond basic console methods. Helpful for debugging, monitoring, and development workflows.</small></p>
+            <button id="logMessage">Log Message</button>
+            <button id="logError">Log Error</button>
+            <button id="logWarning">Log Warning</button>
+            <div class="demo-output" id="consoleOutput"></div>
+        </div>
+
+        <div class="demo-section" id="cookieStore">
+            <h2>Cookie Store</h2>
+            <p><small>Modern API for managing browser cookies asynchronously. Better alternative to document.cookie for handling user preferences and session data.</small></p>
+            <input type="text" id="cookieName" placeholder="Cookie name">
+            <input type="text" id="cookieValue" placeholder="Cookie value">
+            <button id="setCookie">Set Cookie</button>
+            <button id="getCookie">Get Cookie</button>
+            <div class="demo-output" id="cookieOutput"></div>
+        </div>
+
+        <div class="demo-section" id="credentialManagement">
+            <h2>Credential Management</h2>
+            <p><small>Manages and stores user credentials securely. Enables smooth sign-in experiences and password management integration.</small></p>
+            <button id="storeCredential">Store Credential</button>
+            <button id="getCredential">Get Credential</button>
+            <div class="demo-output" id="credentialOutput"></div>
+        </div>
+
+        <div class="demo-section" id="cssCustomHighlight">
+            <h2>CSS Custom Highlight</h2>
+            <p><small>Creates custom text highlights programmatically. Great for text editors, search features, or educational content highlighting.</small></p>
+            <input type="text" id="searchQuery" placeholder="Type to search...">
+            <div id="highlightTarget">
+                <p>This is a sample text that you can search through. The CSS Custom Highlight API will highlight all matches as you type.</p>
+                <p>Try typing words like "highlight", "API", or any other text you see here.</p>
+                <p>The search is case-insensitive and will highlight all occurrences of the text you type.</p>
+            </div>
+            <div class="demo-output" id="highlightOutput"></div>
+        </div>
+
+        <div class="demo-section" id="cssom">
+            <h2>CSSOM (CSS Object Model)</h2>
+            <p><small>Programmatically manipulates CSS styles and rules. Essential for dynamic theming, responsive design, and style customization features.</small></p>
+            <button id="addRule">Add Style Rule</button>
+            <button id="removeRule">Remove Style Rule</button>
+            <div id="cssomTarget">Target element for CSSOM demo</div>
+            <div class="demo-output" id="cssomOutput"></div>
+        </div>
+
+        <div class="demo-section" id="cssPainting">
+            <h2>CSS Painting</h2>
+            <p><small>Creates custom CSS painting behaviors using JavaScript. Enables complex visual effects and custom backgrounds not possible with standard CSS.</small></p>
+            <div id="paintTarget" style="width: 200px; height: 100px; border: 1px solid #ccc;"></div>
+            <button id="togglePaint">Toggle Custom Paint</button>
+        </div>
+
+        <div class="demo-section" id="cssProperties">
+            <h2>CSS Properties</h2>
+            <p><small>Manages CSS custom properties (variables) dynamically. Perfect for theme systems and responsive design implementations.</small></p>
+            <input type="color" id="themeColor" value="#ff0000">
+            <div id="cssPropertiesTarget">Text with custom property</div>
+            <div class="demo-output" id="cssPropertiesOutput"></div>
+        </div>
+
+        <div class="demo-section" id="cssTypedOM">
+            <h2>CSS Typed OM</h2>
+            <p><small>Provides strongly-typed CSS values and better performance. Useful for animations and dynamic style calculations.</small></p>
+            <input type="range" id="fontSize" min="12" max="32" value="16">
+            <div id="typedOMTarget">Text with typed OM styles</div>
+            <div class="demo-output" id="typedOMOutput"></div>
+        </div>
+
+        <div class="demo-section" id="deviceMemory">
+            <h2>Device Memory</h2>
+            <p><small>Detects device memory capacity. Helps in delivering optimized experiences based on device capabilities.</small></p>
+            <button id="checkMemory">Check Device Memory</button>
+            <div class="demo-output" id="deviceMemoryOutput"></div>
+        </div>
+
+        <div class="demo-section" id="deviceOrientation">
+            <h2>Device Orientation</h2>
+            <p><small>Tracks device orientation changes. Used in games, augmented reality, and responsive interfaces that react to device movement.</small></p>
+            <button id="startOrientation">Start Tracking</button>
+            <button id="stopOrientation">Stop Tracking</button>
+            <div class="demo-output" id="orientationOutput">Waiting for orientation data...</div>
+        </div>
+
+        <div class="demo-section" id="devicePosture">
+            <h2>Device Posture</h2>
+            <p><small>Detects foldable device states. Essential for optimizing layouts on foldable devices and dual-screen experiences.</small></p>
+            <button id="checkPosture">Check Posture</button>
+            <div class="demo-output" id="postureOutput">No posture data</div>
+        </div>
+
+        <div class="demo-section" id="dragAndDrop">
+            <h2>Drag and Drop</h2>
+            <p><small>Enables native drag and drop interactions. Common in file uploaders, kanban boards, and interactive interfaces.</small></p>
+            <div id="dragSource" draggable="true" style="width: 100px; height: 100px; background: #2196f3; color: white; display: flex; align-items: center; justify-content: center;">
+                Drag me
+            </div>
+            <div id="dropTarget" style="width: 200px; height: 100px; border: 2px dashed #ccc; margin-top: 10px; display: flex; align-items: center; justify-content: center;">
+                Drop here
+            </div>
+            <div class="demo-output" id="dragDropOutput"></div>
+        </div>
+
+        <div class="demo-section" id="editContext">
+            <h2>Edit Context</h2>
+            <p><small>Provides advanced text editing capabilities. Useful for building rich text editors and input management systems.</small></p>
+            <div contenteditable="true" id="editableContent" style="border: 1px solid #ccc; padding: 10px; min-height: 100px;">
+                This is an editable area. Type or edit text here.
+            </div>
+            <div class="demo-output" id="editContextOutput"></div>
+        </div>
+
+        <div class="demo-section" id="encoding">
+            <h2>Encoding</h2>
+            <p><small>Handles text encoding and decoding operations. Important for working with different character encodings and international text.</small></p>
+            <input type="text" id="textToEncode" placeholder="Text to encode">
+            <button id="encodeText">Encode</button>
+            <button id="decodeText">Decode</button>
+            <div class="demo-output" id="encodingOutput"></div>
+        </div>
+
+        <div class="demo-section" id="encryptedMedia">
+            <h2>Encrypted Media</h2>
+            <p><small>Handles DRM-protected content playback. Essential for streaming services and protected media playback.</small></p>
+            <video id="encryptedVideo" width="300" controls src="./output.mp4">
+                Your browser doesn't support encrypted media
+            </video>
+            <button id="loadEncryptedMedia">Load Encrypted Media</button>
+            <div class="demo-output" id="encryptedMediaOutput"></div>
+        </div>
+
+        <div class="demo-section" id="eyeDropper">
+            <h2>Eye Dropper</h2>
+            <p><small>Allows color picking from anywhere on the screen. Great for design tools and color customization features.</small></p>
+            <button id="openEyeDropper">Open Eye Dropper</button>
+            <div id="colorPreview" style="width: 100px; height: 100px; border: 1px solid #ccc; margin: 10px 0;"></div>
+            <div class="demo-output" id="eyeDropperOutput"></div>
+        </div>
+
+        <div class="demo-section" id="fedCM">
+            <h2>Federated Credential Management</h2>
+            <p><small>Streamlines identity provider sign-in flows. Simplifies implementation of "Sign in with..." functionality.</small></p>
+            <button id="signInWithFedCM">Sign In with FedCM</button>
+            <div class="demo-output" id="fedCMOutput"></div>
+        </div>
+
+        <div class="demo-section" id="file">
+            <h2>File</h2>
+            <p><small>Provides advanced file handling capabilities. Used for file uploads, downloads, and local file manipulation.</small></p>
+            <input type="file" id="fileInput" multiple style="display: none">
+            <button id="selectFiles">Select Files</button>
+            <button id="readFiles">Read Selected Files</button>
+            <div class="demo-output" id="fileOutput"></div>
+        </div>
+
+        <div class="demo-section" id="fileEntry">
+            <h2>File Entry</h2>
+            <p><small>Enables file system-like operations in web apps. Useful for apps that need to manage files and directories.</small></p>
+            <button id="createFileEntry">Create File</button>
+            <button id="readFileEntry">Read File</button>
+            <div class="demo-output" id="fileEntryOutput"></div>
+        </div>
+
+        <div class="demo-section" id="fileSystem">
+            <h2>File System</h2>
+            <p><small>Provides access to a sandboxed file system. Perfect for offline-capable apps and local file management.</small></p>
+            <button id="openDirectory">Open Directory</button>
+            <button id="createDirectory">Create Directory</button>
+            <div class="demo-output" id="fileSystemOutput"></div>
+        </div>
+
+        <div class="demo-section" id="fontLoading">
+            <h2>Font Loading</h2>
+            <p><small>Manages custom font loading and status. Important for controlling typography and ensuring proper font rendering.</small></p>
+            <input type="text" id="fontFamily" placeholder="Font family name">
+            <button id="loadFont">Load Font</button>
+            <div id="fontPreview" style="margin-top: 10px;">
+                The quick brown fox jumps over the lazy dog
+            </div>
+            <div class="demo-output" id="fontLoadingOutput"></div>
+        </div>
+
+        <div class="demo-section" id="fullscreen">
+            <h2>Fullscreen</h2>
+            <p><small>Controls fullscreen mode for elements. Common in video players, games, and presentation modes.</small></p>
+            <div id="fullscreenTarget" style="padding: 20px; background: #f0f0f0; cursor: pointer;">
+                Click me to toggle fullscreen
+            </div>
+            <div class="demo-output" id="fullscreenOutput"></div>
+        </div>
+
+        <div class="demo-section" id="geometry">
+            <h2>Geometry</h2>
+            <p><small>Handles element geometry and layout calculations. Used for responsive layouts and dynamic positioning.</small></p>
+            <div id="geometryTarget" style="width: 200px; height: 100px; background: #e0e0e0; resize: both; overflow: auto;">
+                Resize this element
+            </div>
+            <div class="demo-output" id="geometryOutput"></div>
+        </div>
+
+        <div class="demo-section" id="idleDetection">
+            <h2>Idle Detection</h2>
+            <p><small>Detects when the user or screen becomes idle. Useful for chat applications, session management, and power saving features.</small></p>
+            <p><small>Threshold : 1 minute. Click "Start Detection" and wait for 1 minute to see the status change (Don't interact with the page).</small></p>
+            <button id="startIdleDetection">Start Detection</button>
+            <button id="stopIdleDetection">Stop Detection</button>
+            <div class="demo-output" id="idleOutput">Status: Not monitoring</div>
+        </div>
+
+        <div class="demo-section" id="imageCapture">
+            <h2>Image Capture</h2>
+            <p><small>Provides advanced camera control and photo capture. Essential for web-based camera applications and QR code scanners.</small></p>
+            <video id="cameraPreview" autoplay playsinline style="width: 300px;"></video>
+            <br>
+            <button id="startCamera">Start Camera</button>
+            <button id="stopCamera">Stop Camera</button>
+            <button id="takePhoto">Take Photo</button>
+            <div class="demo-output" id="imageCaptureOutput"></div>
+            <img id="capturedImage" style="max-width: 300px; display: none;">
+        </div>
+
+        <div class="demo-section" id="keyboard">
+            <h2>Keyboard</h2>
+            <p><small>Handles advanced keyboard input and events. Great for gaming, shortcuts, and custom input handling.</small></p>
+            <div id="keyboardTarget" tabindex="0" style="padding: 20px; background: #f5f5f5;">
+                Focus here and press keys
+            </div>
+            <div class="demo-output" id="keyboardOutput"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import {
+            useBackgroundSync,
+            useBackgroundTask,
+            useBadge,
+            useBeacon,
+            useBroadcastChannel,
+            useCanvas,
+            useClipboard,
+            useCompressionStream,
+            useConsole,
+            useCookieStore,
+            useCredentialManagement,
+            useCSSCustomHighlight,
+            useCSSOM,
+            useCSSPainting,
+            useCSSProperties,
+            useCSSTypedOM,
+            useDeviceMemory,
+            useDeviceOrientation,
+            useDevicePosture,
+            useDragAndDrop,
+            useEditContext,
+            useEncoding,
+            useEncryptedMedia,
+            useEyeDropper,
+            useFedCM,
+            useFile,
+            useFileEntry,
+            useFileSystem,
+            useFontLoading,
+            useFullscreen,
+            useGeometry,
+            useIdleDetection,
+            useImageCapture,
+            useKeyboard
+        } from '../dist/browser-hooks.js';
+
+        // Background Sync Demo
+        const backgroundSync = useBackgroundSync();
+        document.getElementById('registerSync').onclick = async () => {
+            try {
+                await backgroundSync.register('demo-sync');
+                document.getElementById('backgroundSyncOutput').textContent = 'Sync registered successfully';
+            } catch (error) {
+                document.getElementById('backgroundSyncOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Background Task Demo
+        const backgroundTask = useBackgroundTask();
+        let currentTask = null;
+        document.getElementById('startTask').onclick = () => {
+            currentTask = backgroundTask.scheduleTask((deadline) => {
+                // Simulate progress from 0 to 100%
+                let progress = 0;
+                while (deadline.timeRemaining() > 0 && progress < 100) {
+                    progress++;
+                    document.getElementById('backgroundTaskOutput').textContent = 
+                        `Progress: ${progress}%`;
+                }
+            }, { timeout: 5000 });  // 5 second timeout
+        };
+        document.getElementById('stopTask').onclick = () => {
+            if (currentTask) {
+                cancelIdleCallback(currentTask);
+                document.getElementById('backgroundTaskOutput').textContent = 'Task cancelled';
+            }
+        };
+
+        // Badge Demo
+        const badge = useBadge();
+        document.getElementById('setBadge').onclick = async () => {
+            const count = parseInt(document.getElementById('badgeCount').value);
+            await badge.setBadge(count);
+            document.getElementById('badgeOutput').textContent = `Current badge: ${count}`;
+        };
+        document.getElementById('clearBadge').onclick = async () => {
+            await badge.clearBadge();
+            document.getElementById('badgeOutput').textContent = 'Badge cleared';
+        };
+
+        // Beacon Demo
+        const beacon = useBeacon();
+        document.getElementById('sendBeacon').onclick = async () => {
+            const success = await beacon.sendBeacon('/analytics', { event: 'demo-beacon' });
+            document.getElementById('beaconOutput').textContent = 
+                success ? 'Beacon sent successfully' : 'Failed to send beacon';
+        };
+
+        // Broadcast Channel Demo
+        const broadcast = useBroadcastChannel('demo-channel');
+        
+        // Mendengarkan pesan yang masuk
+        broadcast.onMessage((message) => {
+            const output = document.getElementById('broadcastOutput');
+            output.innerHTML += `<div>Received: ${message}</div>`;
+        });
+
+        document.getElementById('sendBroadcast').onclick = () => {
+            const message = document.getElementById('broadcastMessage').value;
+            if (message) {
+                broadcast.postMessage(message);
+                // Tampilkan pesan yang dikirim
+                const output = document.getElementById('broadcastOutput');
+                output.innerHTML += `<div>Sent: ${message}</div>`;
+                // Bersihkan input setelah mengirim
+                document.getElementById('broadcastMessage').value = '';
+            }
+        };
+
+        // Canvas Demo
+        const canvasDemo = useCanvas(document.getElementById('demoCanvas'));
+        document.getElementById('drawOnCanvas').onclick = () => {
+            const ctx = canvasDemo.state.context;
+            if (ctx) {
+                canvasDemo.drawRect(ctx, 50, 50, 100, 100, 'blue');
+                canvasDemo.drawCircle(ctx, 150, 100, 30, 'red');
+            }
+        };
+        document.getElementById('clearCanvas').onclick = () => {
+            const ctx = canvasDemo.state.context;
+            if (ctx) canvasDemo.clearCanvas(ctx);
+        };
+
+        // Clipboard Demo
+        const clipboard = useClipboard();
+        document.getElementById('copyToClipboard').onclick = async () => {
+            const text = document.getElementById('clipboardText').value;
+            try {
+                await clipboard.writeText(text);
+                document.getElementById('clipboardOutput').textContent = 'Copied to clipboard!';
+            } catch (error) {
+                document.getElementById('clipboardOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+        document.getElementById('pasteFromClipboard').onclick = async () => {
+            try {
+                // Request clipboard read permission
+                const permissionResult = await navigator.permissions.query({ name: 'clipboard-read' });
+                if (permissionResult.state === 'denied') {
+                    throw new Error('Clipboard permission denied');
+                }
+                
+                // If permission needs to be requested, notify user
+                if (permissionResult.state === 'prompt') {
+                    document.getElementById('clipboardOutput').textContent = 'Please grant clipboard access when prompted';
+                }
+
+                // Try to read from clipboard
+                const text = await clipboard.readText();
+                document.getElementById('clipboardOutput').textContent = `Pasted: ${text}`;
+            } catch (error) {
+                document.getElementById('clipboardOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Compression Stream Demo
+        const compressionStream = useCompressionStream();
+        
+        // Check browser support on load
+        if (!compressionStream.state.isSupported) {
+            document.getElementById('compressionOutput').textContent = 
+                'Your browser does not support the Compression Streams API';
+            document.getElementById('compressText').disabled = true;
+            document.getElementById('decompressText').disabled = true;
+        }
+
+        document.getElementById('compressText').onclick = async () => {
+            const output = document.getElementById('compressionOutput');
+            const textArea = document.getElementById('textToCompress');
+            const text = textArea.value;
+            
+            if (!text) {
+                output.textContent = 'Please enter some text first';
+                return;
+            }
+
+            try {
+                // Clear previous output
+                output.textContent = 'Compressing...';
+                
+                // Disable inputs during compression
+                textArea.disabled = true;
+                document.getElementById('compressText').disabled = true;
+                
+                const compressed = await compressionStream.compress(text);
+                
+                if (!compressed) {
+                    throw new Error('Compression failed - no data returned');
+                }
+
+                // Store compressed data and show stats
+                window._compressedData = compressed;
+                const originalSize = new TextEncoder().encode(text).length;
+                const compressedSize = compressed.length;
+                const ratio = Math.round(compressedSize/originalSize*100);
+                
+                output.textContent = `Compressed: ${originalSize} bytes → ${compressedSize} bytes (${ratio}%)`;
+                
+                // Enable decompression only after successful compression
+                document.getElementById('decompressText').disabled = false;
+            } catch (error) {
+                console.error('Compression error:', error);
+                output.textContent = `Error: ${error.message}`;
+            } finally {
+                // Re-enable inputs
+                textArea.disabled = false;
+                document.getElementById('compressText').disabled = false;
+            }
+        };
+
+        document.getElementById('decompressText').onclick = async () => {
+            const output = document.getElementById('compressionOutput');
+            
+            if (!window._compressedData) {
+                output.textContent = 'No compressed data available. Compress some text first.';
+                return;
+            }
+
+            try {
+                output.textContent = 'Decompressing...';
+                document.getElementById('decompressText').disabled = true;
+                
+                const decompressed = await compressionStream.decompress(window._compressedData);
+                
+                if (!decompressed) {
+                    throw new Error('Decompression failed - no data returned');
+                }
+
+                const text = new TextDecoder().decode(decompressed);
+                output.textContent = `Decompressed text: ${text}`;
+            } catch (error) {
+                console.error('Decompression error:', error);
+                output.textContent = `Error: ${error.message}`;
+            } finally {
+                document.getElementById('decompressText').disabled = false;
+            }
+        };
+
+        // Console Demo
+        const console = useConsole({ historyEnabled: true });
+        document.getElementById('logMessage').onclick = () => {
+            console.log('This is a demo log message');
+            updateConsoleOutput();
+        };
+        document.getElementById('logError').onclick = () => {
+            console.error('This is a demo error');
+            updateConsoleOutput();
+        };
+        document.getElementById('logWarning').onclick = () => {
+            console.warn('This is a demo warning');
+            updateConsoleOutput();
+        };
+        function updateConsoleOutput() {
+            const history = console.getHistory();
+            document.getElementById('consoleOutput').innerHTML = history
+                .map(entry => `<div>${entry.type}: ${entry.messages.join(' ')}</div>`)
+                .join('');
+        }
+
+        // Cookie Store Demo
+        const cookieStore = useCookieStore();
+        document.getElementById('setCookie').onclick = async () => {
+            const name = document.getElementById('cookieName').value;
+            const value = document.getElementById('cookieValue').value;
+            await cookieStore.setCookie(name, value);
+            document.getElementById('cookieOutput').textContent = `Cookie set: ${name}=${value}`;
+        };
+        document.getElementById('getCookie').onclick = async () => {
+            const name = document.getElementById('cookieName').value;
+            const value = await cookieStore.getCookie(name);
+            document.getElementById('cookieOutput').textContent = value ? 
+                `Cookie value: ${value}` : 'Cookie not found';
+        };
+
+        // Credential Management Demo
+        const credentialManagement = useCredentialManagement();
+        document.getElementById('storeCredential').onclick = async () => {
+            try {
+                await credentialManagement.store({
+                    id: 'demo@example.com',
+                    password: 'demo-password',
+                    type: 'password'
+                });
+                document.getElementById('credentialOutput').textContent = 'Credential stored';
+            } catch (error) {
+                document.getElementById('credentialOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+        document.getElementById('getCredential').onclick = async () => {
+            try {
+                const cred = await credentialManagement.get();
+                document.getElementById('credentialOutput').textContent = 
+                    cred ? `Retrieved credential for: ${cred.id}` : 'No credential found';
+            } catch (error) {
+                document.getElementById('credentialOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // CSS Custom Highlight Demo
+        const highlight = useCSSCustomHighlight();
+
+        // Early check for API support
+        if (!highlight.state.isSupported) {
+            document.getElementById('highlightOutput').textContent = 'CSS Custom Highlight API tidak didukung di browser ini. Menggunakan fallback...';
+            // Tambahkan kelas CSS untuk fallback highlighting
+            const style = document.createElement('style');
+            style.textContent = `
+                .fallback-highlight {
+                    background-color: yellow;
+                    color: black;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        searchQuery.addEventListener('input', () => {
+            const query = searchQuery.value.trim();
+            
+            // Clear highlights if query is empty
+            if (!query) {
+                if (highlight.state.isSupported) {
+                    highlight.clearAllHighlights();
+                } else {
+                    // Remove fallback highlights
+                    document.querySelectorAll('.fallback-highlight').forEach(el => {
+                        el.outerHTML = el.textContent || '';
+                    });
+                }
+                document.getElementById('highlightOutput').textContent = '';
+                return;
+            }
+
+            // Find matches and handle highlighting
+            const text = highlightTarget.textContent || '';
+            const searchText = query.toLowerCase();
+            let matches = 0;
+
+            if (highlight.state.isSupported) {
+                // Use CSS Custom Highlight API
+                const ranges = [];
+                const walker = document.createTreeWalker(highlightTarget, NodeFilter.SHOW_TEXT);
+                let node = walker.nextNode();
+                
+                while (node) {
+                    const nodeText = node.textContent.toLowerCase();
+                    let pos = 0;
+                    
+                    while ((pos = nodeText.indexOf(searchText, pos)) !== -1) {
+                        const range = new Range();
+                        range.setStart(node, pos);
+                        range.setEnd(node, pos + searchText.length);
+                        ranges.push(range);
+                        pos += 1;
+                        matches++;
+                    }
+                    
+                    node = walker.nextNode();
+                }
+
+                // Update highlights
+                highlight.clearAllHighlights();
+                if (ranges.length > 0) {
+                    highlight.createHighlight('search-results', { range: ranges });
+                }
+            } else {
+                // Use fallback highlighting
+                // Remove previous highlights first
+                document.querySelectorAll('.fallback-highlight').forEach(el => {
+                    el.outerHTML = el.textContent || '';
+                });
+
+                // Apply new highlights
+                highlightTarget.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const nodeText = node.textContent || '';
+                        const parts = nodeText.split(new RegExp(`(${query})`, 'gi'));
+                        if (parts.length > 1) {
+                            const span = document.createElement('span');
+                            span.innerHTML = parts.map(part => 
+                                part.toLowerCase() === searchText ? 
+                                    `<span class="fallback-highlight">${part}</span>` : 
+                                    part
+                            ).join('');
+                            node.replaceWith(span);
+                            matches += parts.length - 1;
+                        }
+                    }
+                });
+            }
+
+            // Update output
+            document.getElementById('highlightOutput').textContent = 
+                matches > 0 ? `Ditemukan ${matches} kecocokan` : 'Tidak ditemukan kecocokan';
+        });
+
+        // CSSOM Demo
+        const cssom = useCSSOM();
+        let styleSheet = null;
+
+        document.getElementById('addRule').onclick = () => {
+            try {
+                if (!styleSheet) {
+                    styleSheet = cssom.createStyleSheet();
+                }
+                cssom.addRule(styleSheet, {
+                    selector: '#cssomTarget',
+                    properties: {
+                        color: 'blue',
+                        fontWeight: 'bold'
+                    }
+                });
+                document.getElementById('cssomOutput').textContent = 'Style rule added';
+            } catch (error) {
+                document.getElementById('cssomOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        document.getElementById('removeRule').onclick = () => {
+            try {
+                if (styleSheet && styleSheet.cssRules.length > 0) {
+                    cssom.removeRule(styleSheet, styleSheet.cssRules.length - 1);
+                    document.getElementById('cssomOutput').textContent = 'Style rule removed';
+                }
+            } catch (error) {
+                document.getElementById('cssomOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // CSS Painting Demo
+        const painting = useCSSPainting();
+        let isPaintActive = false;
+        
+        // Define the paint worklet code
+        const demoPaintWorklet = {
+            name: 'demo-paint',
+            code: `
+                registerPaint('demo-paint', class {
+                    paint(ctx, size) {
+                        ctx.fillStyle = '#ff0000';
+                        ctx.beginPath();
+                        ctx.arc(size.width / 2, size.height / 2, Math.min(size.width, size.height) / 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                });
+            `
+        };
+
+        document.getElementById('togglePaint').onclick = async () => {
+            isPaintActive = !isPaintActive;
+            const target = document.getElementById('paintTarget');
+            
+            if (isPaintActive) {
+                await painting.registerPaintWorklet(demoPaintWorklet);
+                target.style.background = 'paint(demo-paint)';
+            } else {
+                painting.unregisterPaintWorklet('demo-paint');
+                target.style.background = 'none';
+            }
+        };
+
+        // CSS Properties Demo
+        const cssProperties = useCSSProperties();
+        document.getElementById('themeColor').oninput = (e) => {
+            cssProperties.setPropertyValue('--theme-color', e.target.value, document.getElementById('cssPropertiesTarget'));
+            document.getElementById('cssPropertiesTarget').style.color = 
+                cssProperties.getPropertyValue('--theme-color', document.getElementById('cssPropertiesTarget'));
+        };
+
+        // CSS Typed OM Demo
+        const typedOM = useCSSTypedOM();
+        document.getElementById('fontSize').oninput = (e) => {
+            const size = parseInt(e.target.value);
+            const target = document.getElementById('typedOMTarget');
+            if (typedOM.state.isSupported) {
+                const pxValue = typedOM.px(size);
+                target.attributeStyleMap.set('font-size', pxValue);
+                document.getElementById('typedOMOutput').textContent = 
+                    `Font size: ${pxValue.value}${pxValue.unit}`;
+            } else {
+                target.style.fontSize = `${size}px`;
+                document.getElementById('typedOMOutput').textContent = 
+                    `Font size: ${size}px (fallback)`;
+            }
+        };
+        
+        // Device Memory Demo
+        const deviceMemory = useDeviceMemory();
+        document.getElementById('checkMemory').onclick = () => {
+            const memory = deviceMemory.getMemory();
+            document.getElementById('deviceMemoryOutput').textContent = 
+                `Device memory: ${memory}GB`;
+        };
+
+        // Device Orientation Demo
+        const deviceOrientation = useDeviceOrientation();
+        let orientationTracking = false;
+
+        document.getElementById('startOrientation').onclick = () => {
+            orientationTracking = true;
+            deviceOrientation.start((orientation) => {
+                if (orientationTracking) {
+                    document.getElementById('orientationOutput').textContent = 
+                        `Alpha: ${orientation.alpha.toFixed(2)}°, Beta: ${orientation.beta.toFixed(2)}°, Gamma: ${orientation.gamma.toFixed(2)}°`;
+                }
+            });
+        };
+
+        document.getElementById('stopOrientation').onclick = () => {
+            orientationTracking = false;
+            deviceOrientation.stop();
+            document.getElementById('orientationOutput').textContent = 'Tracking stopped';
+        };
+
+        // Device Posture Demo
+        const devicePosture = useDevicePosture();
+        
+        document.getElementById('checkPosture').onclick = () => {
+            if (!devicePosture.state.isSupported) {
+                document.getElementById('postureOutput').textContent = 'Device Posture API is not supported';
+                return;
+            }
+            
+            if (!devicePosture.state.isListening) {
+                const started = devicePosture.startListening();
+                if (!started) {
+                    document.getElementById('postureOutput').textContent = 'Failed to start posture detection';
+                    return;
+                }
+            } else {
+                devicePosture.stopListening();
+                document.getElementById('postureOutput').textContent = 'Posture detection stopped';
+                return;
+            }
+
+            devicePosture.subscribe((state) => {
+                const output = document.getElementById('postureOutput');
+                if (state.posture) {
+                    output.textContent = `Current posture: ${state.posture.type}${state.posture.angle ? `, angle: ${state.posture.angle}°` : ''}`;
+                } else {
+                    output.textContent = 'No posture data available';
+                }
+            });
+        };
+
+        // Drag and Drop Demo
+        const dragDrop = useDragAndDrop();
+        const dragSource = document.getElementById('dragSource');
+        const dropTarget = document.getElementById('dropTarget');
+
+        dragDrop.enableDragSource(dragSource, {
+            onDragStart: () => {
+                dragSource.style.opacity = '0.5';
+                document.getElementById('dragDropOutput').textContent = 'Status: Mulai menggeser elemen';
+            },
+            onDragEnd: () => {
+                dragSource.style.opacity = '1';
+                document.getElementById('dragDropOutput').textContent = 'Status: Elemen selesai digeser';
+            }
+        });
+
+        dragDrop.enableDropTarget(dropTarget, {
+            onDragOver: (e) => {
+                e.preventDefault();
+                dropTarget.style.background = '#e3f2fd';
+                document.getElementById('dragDropOutput').textContent = 'Status: Elemen berada di atas area drop';
+            },
+            onDragLeave: () => {
+                dropTarget.style.background = 'transparent';
+                document.getElementById('dragDropOutput').textContent = 'Status: Elemen meninggalkan area drop';
+            },
+            onDrop: () => {
+                dropTarget.style.background = 'transparent';
+                document.getElementById('dragDropOutput').textContent = 'Status: Elemen berhasil di-drop!';
+                
+                // Tambahkan efek visual saat berhasil drop
+                dropTarget.style.border = '2px solid #4CAF50';
+                setTimeout(() => {
+                    dropTarget.style.border = '2px dashed #ccc';
+                }, 1000);
+            }
+        });
+
+        // Edit Context Demo
+        const editableContent = document.getElementById('editableContent');
+        const editContext = useEditContext({
+            initialText: editableContent.textContent,
+            onInput: (text) => {
+                document.getElementById('editContextOutput').textContent = 
+                    `Content changed: ${text.length} characters`;
+            },
+            onSelectionChange: (start, end) => {
+                const selection = window.getSelection();
+                if (selection) {
+                    const selectedText = selection.toString();
+                    document.getElementById('editContextOutput').textContent = 
+                        `Selected text: ${selectedText} (positions ${start}-${end})`;
+                }
+            },
+            onCompositionStart: () => {
+                const output = document.getElementById('editContextOutput');
+                output.textContent = 'IME Composition started...';
+                output.style.color = '#2196f3';
+            },
+            onCompositionEnd: () => {
+                const output = document.getElementById('editContextOutput');
+                output.textContent = 'IME Composition ended';
+                output.style.color = '';
+                setTimeout(() => {
+                    const text = editableContent.textContent || '';
+                    output.textContent = `Content changed: ${text.length} characters`;
+                }, 500);
+            }
+        });
+
+        // Initialize the edit context with our editable element
+        editContext.initialize(editableContent);
+
+        // Show initial state
+        const output = document.getElementById('editContextOutput');
+        if (!editContext.state.isSupported) {
+            output.textContent = 'Edit Context API is not supported in this browser';
+        } else {
+            output.textContent = `Edit Context is ${editContext.state.isActive ? 'active' : 'not active'}`;
+            if (editContext.state.isActive) {
+                output.textContent += ` (${editContext.state.text.length} characters)`;
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('unload', () => {
+            editContext.cleanup(editableContent);
+        });
+
+        // Encoding Demo
+        const encoding = useEncoding();
+        document.getElementById('encodeText').onclick = async () => {
+            const text = document.getElementById('textToEncode').value;
+            const encoded = await encoding.encode(text);
+            if (encoded) {
+                // Convert Uint8Array to string of numbers for display
+                document.getElementById('encodingOutput').textContent = `Encoded: ${Array.from(encoded)}`;
+            }
+        };
+        document.getElementById('decodeText').onclick = async () => {
+            const encodedText = document.getElementById('encodingOutput').textContent;
+            if (encodedText.startsWith('Encoded: ')) {
+                const encoded = encodedText.substring('Encoded: '.length);
+                const decoded = await encoding.decode(encoded);
+                document.getElementById('encodingOutput').textContent = `Decoded: ${decoded}`;
+            }
+        };
+
+        // Encrypted Media Demo
+        const encryptedMedia = useEncryptedMedia();
+        document.getElementById('loadEncryptedMedia').onclick = async () => {
+            try {
+                const video = document.getElementById('encryptedVideo');
+                const keySystem = 'org.w3.clearkey';
+                const config = [{
+                    initDataTypes: ['keyids', 'webm'],
+                    audioCapabilities: [{ contentType: 'audio/webm; codecs="vorbis"' }],
+                    videoCapabilities: [{ contentType: 'video/webm; codecs="vp8"' }]
+                }];
+
+                const mediaKeySystemAccess = await encryptedMedia.requestAccess(keySystem, config);
+                if (!mediaKeySystemAccess) throw new Error('Failed to get media key system access');
+
+                const mediaKeys = await encryptedMedia.createMediaKeys(mediaKeySystemAccess);
+                if (!mediaKeys) throw new Error('Failed to create media keys');
+
+                const success = await encryptedMedia.setMediaKeys(video, mediaKeys);
+                if (!success) throw new Error('Failed to set media keys');
+
+                document.getElementById('encryptedMediaOutput').textContent = 'EME initialized successfully';
+            } catch (error) {
+                document.getElementById('encryptedMediaOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Eye Dropper Demo
+        const eyeDropper = useEyeDropper();
+        document.getElementById('openEyeDropper').onclick = async () => {
+            try {
+                const result = await eyeDropper.openPicker();
+                const colorPreview = document.getElementById('colorPreview');
+                if (result) {
+                    colorPreview.style.backgroundColor = result.sRGBHex;
+                    document.getElementById('eyeDropperOutput').textContent = `Selected color: ${result.sRGBHex}`;
+                }
+            } catch (error) {
+                document.getElementById('eyeDropperOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // FedCM Demo
+        const fedCM = useFedCM();
+        document.getElementById('signInWithFedCM').onclick = async () => {
+            try {
+                const credential = await fedCM.signIn({
+                    providerId: 'https://identity.provider',
+                    clientId: 'demo-client'
+                });
+                
+                if (credential && credential.email) {
+                    document.getElementById('fedCMOutput').textContent = 
+                        `Signed in as: ${credential.email}`;
+                } else {
+                    document.getElementById('fedCMOutput').textContent = 
+                        'Sign in failed: No valid credential received';
+                }
+            } catch (error) {
+                document.getElementById('fedCMOutput').textContent = 
+                    `Sign in failed: ${error.message || 'Unknown error'}`;
+            }
+        };
+
+        // File Demo
+        const file = useFile();
+        const fileInput = document.getElementById('fileInput');
+        document.getElementById('selectFiles').onclick = () => fileInput.click();
+        document.getElementById('readFiles').onclick = async () => {
+            const files = Array.from(fileInput.files || []);
+            const output = document.getElementById('fileOutput');
+            output.innerHTML = '';
+
+            for (const f of files) {
+                const content = await file.readFile(f, 'text');
+                const info = file.getFileInfo(f);
+                output.innerHTML += `<div>File: ${info.name}, Content: ${content?.toString().slice(0, 50)}...</div>`;
+            }
+        };
+
+        // File Entry Demo
+        const fileEntry = useFileEntry();
+        document.getElementById('createFileEntry').onclick = async () => {
+            try {
+                // First get/create the file entry
+                const entry = await fileEntry.getFile('demo.txt', { create: true });
+                // Then write content to it
+                await fileEntry.writeFile(entry, new Blob(['Hello, FileEntry API!'], { type: 'text/plain' }));
+                document.getElementById('fileEntryOutput').textContent = 
+                    `File created: ${entry.name}`;
+            } catch (error) {
+                document.getElementById('fileEntryOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+        document.getElementById('readFileEntry').onclick = async () => {
+            try {
+                // First get the file entry
+                const entry = await fileEntry.getFile('demo.txt', { create: false });
+                // Then read content from it
+                const content = await fileEntry.readFile(entry);
+                document.getElementById('fileEntryOutput').textContent = 
+                    `File content: ${content}`;
+            } catch (error) {
+                document.getElementById('fileEntryOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // File System Demo
+        const fileSystem = useFileSystem();
+        document.getElementById('openDirectory').onclick = async () => {
+            try {
+                const dirHandle = await fileSystem.openDirectory();
+                const entries = await fileSystem.listDirectoryContents(dirHandle);
+                document.getElementById('fileSystemOutput').textContent = 
+                    `Directory contents: ${entries.map(e => e.name).join(', ')}`;
+            } catch (error) {
+                document.getElementById('fileSystemOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+        document.getElementById('createDirectory').onclick = async () => {
+            try {
+                const dirHandle = await fileSystem.openDirectory();
+                if (dirHandle) {
+                    const newDir = await dirHandle.getDirectoryHandle('demo-directory', { create: true });
+                    document.getElementById('fileSystemOutput').textContent = 
+                        `Created directory: ${newDir.name}`;
+                }
+            } catch (error) {
+                document.getElementById('fileSystemOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Font Loading Demo
+        const fontLoading = useFontLoading();
+        document.getElementById('loadFont').onclick = async () => {
+            const fontFamily = document.getElementById('fontFamily').value;
+            try {
+                // System fonts list (common fonts that usually pre-installed)
+                const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Times', 'Courier New', 'Courier', 'Verdana', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact'];
+                
+                if (systemFonts.includes(fontFamily)) {
+                    // For system fonts, just check if it's available
+                    const isAvailable = await fontLoading.checkFont(fontFamily);
+                    if (isAvailable) {
+                        document.getElementById('fontPreview').style.fontFamily = fontFamily;
+                        document.getElementById('fontLoadingOutput').textContent = `System font '${fontFamily}' is available`;
+                    } else {
+                        throw new Error(`System font '${fontFamily}' is not available`);
+                    }
+                } else {
+                    // For Google Fonts
+                    const link = document.createElement('link');
+                    link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}:wght@400;700&display=swap`;
+                    link.rel = 'stylesheet';
+                    document.head.appendChild(link);
+                    
+                    try {
+                        await new Promise((resolve, reject) => {
+                            link.onload = resolve;
+                            link.onerror = () => reject(new Error('Failed to load font CSS'));
+                            // Add timeout
+                            setTimeout(() => reject(new Error('Font loading timed out')), 5000);
+                        });
+
+                        document.getElementById('fontPreview').style.fontFamily = `'${fontFamily}', sans-serif`;
+                        document.getElementById('fontLoadingOutput').textContent = `Font '${fontFamily}' loaded from Google Fonts`;
+                    } catch (error) {
+                        link.remove(); // Clean up on error
+                        throw error;
+                    }
+                }
+            } catch (error) {
+                document.getElementById('fontLoadingOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Fullscreen Demo
+        const fullscreen = useFullscreen();
+        const fullscreenSection = document.getElementById('fullscreen');
+        const fullscreenTarget = document.getElementById('fullscreenTarget');
+        const fullscreenOutput = document.getElementById('fullscreenOutput');
+
+        let isToggling = false;
+        
+        // Subscribe to state changes
+        fullscreen.subscribe((state) => {
+            fullscreenOutput.textContent = state.isFullscreen ? 'In fullscreen mode' : 'Not in fullscreen mode';
+            
+            if (state.error) {
+                fullscreenOutput.textContent = `Error: ${state.error.message}`;
+            }
+        });
+
+        // Add click handler with debounce
+        fullscreenTarget?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (isToggling) return;
+            isToggling = true;
+
+            try {
+                await fullscreen.toggle(fullscreenSection);
+            } catch (error) {
+                console.error('Fullscreen error:', error);
+                fullscreenOutput.textContent = `Error: ${error.message}`;
+            } finally {
+                setTimeout(() => {
+                    isToggling = false;
+                }, 300); // Add delay before allowing next toggle
+            }
+        });
+
+        // Geometry Demo
+        const geometry = useGeometry();
+        const geometryTarget = document.getElementById('geometryTarget');
+        
+        const updateGeometryOutput = () => {
+            const rect = geometry.getRectFromElement(geometryTarget);
+            document.getElementById('geometryOutput').textContent = 
+                `Size: ${Math.round(rect.width)}x${Math.round(rect.height)}`;
+        };
+
+        // Use ResizeObserver to track size changes
+        const resizeObserver = new ResizeObserver(updateGeometryOutput);
+        resizeObserver.observe(geometryTarget);
+        updateGeometryOutput(); // Initial measurement
+
+        // Idle Detection Demo
+        const idleDetection = useIdleDetection();
+        let isMonitoring = false;
+
+        // Check browser support
+        if (!idleDetection.state.isSupported) {
+            document.getElementById('idleOutput').textContent = 'Idle Detection API tidak didukung di browser ini';
+            document.getElementById('startIdleDetection').disabled = true;
+            document.getElementById('stopIdleDetection').disabled = true;
+        } else {
+            document.getElementById('startIdleDetection').onclick = async () => {
+                try {
+                    console.log('Checking Idle Detection API support and requesting permission...');
+                    const permissionStatus = await idleDetection.requestPermission();
+                    console.log('Permission status:', permissionStatus);
+                    
+                    if (permissionStatus !== 'granted') {
+                        throw new Error('Idle Detection permission not granted');
+                    }
+
+                    document.getElementById('idleOutput').textContent = 'Starting idle detection...';
+                    console.log('Starting Idle Detection with 15 second threshold');
+
+                    await idleDetection.start({
+                        threshold: 60000, // Reduced to 15 seconds for easier testing
+                        onStateChange: (state) => {
+                            const status = `Status: ${state.user} (${state.screen})`;
+                            console.log('Idle state changed:', state);
+                            document.getElementById('idleOutput').textContent = status;
+                        }
+                    });
+                    isMonitoring = true;
+                    console.log('Idle Detection started successfully');
+                } catch (error) {
+                    document.getElementById('idleOutput').textContent = `Error: ${error.message}`;
+                    console.error('Idle Detection error:', error);
+                }
+            };
+
+            document.getElementById('stopIdleDetection').onclick = () => {
+                if (isMonitoring) {
+                    console.log('Stopping Idle Detection');
+                    idleDetection.stop();
+                    document.getElementById('idleOutput').textContent = 'Status: Stopped';
+                    isMonitoring = false;
+                    console.log('Idle Detection stopped');
+                }
+            };
+        }
+
+        // Image Capture Demo
+        const imageCapture = useImageCapture();
+        
+        document.getElementById('startCamera').onclick = async () => {
+            try {
+                await imageCapture.startCamera({
+                    targetElement: document.getElementById('cameraPreview')
+                });
+                document.getElementById('imageCaptureOutput').textContent = 'Camera ready';
+            } catch (error) {
+                document.getElementById('imageCaptureOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        document.getElementById('stopCamera').onclick = () => {
+            imageCapture.stopCamera();
+            document.getElementById('imageCaptureOutput').textContent = 'Camera stopped';
+            document.getElementById('capturedImage').style.display = 'none';
+        };
+
+        document.getElementById('takePhoto').onclick = async () => {
+            if (!imageCapture.state.isReady) return;
+            try {
+                const blob = await imageCapture.takePhoto();
+                const capturedImage = document.getElementById('capturedImage');
+                capturedImage.src = URL.createObjectURL(blob);
+                capturedImage.style.display = 'block';
+                document.getElementById('imageCaptureOutput').textContent = 'Photo captured';
+            } catch (error) {
+                document.getElementById('imageCaptureOutput').textContent = `Error: ${error.message}`;
+            }
+        };
+
+        // Keyboard Demo
+        const keyboard = useKeyboard({
+            target: document.getElementById('keyboardTarget')
+        });
+        
+        keyboard.subscribe((state) => {
+            if (state.lastKey) {
+                document.getElementById('keyboardOutput').textContent = 
+                    `Key ${state.activeKeys.size > 0 ? 'down' : 'up'}: ${state.lastKey}`;
+            }
+        });
+
+     
+    </script>
+</body>
+</html>
