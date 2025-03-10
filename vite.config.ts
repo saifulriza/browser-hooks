@@ -6,26 +6,14 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'BrowserHooks',
-      formats: ['es'],
-      fileName: () => 'browser-hooks.js'
+      formats: ['es', 'umd'],
+      fileName: (format) => `browser-hooks.${format}.js`
     },
     sourcemap: true,
     minify: 'terser',
     rollupOptions: {
       output: {
-        inlineDynamicImports: false,
-        chunkFileNames: 'chunks/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        manualChunks(id) {
-          if (id.includes('hooks/use')) {
-            if (id.includes('CSS')) return 'css-hooks';
-            if (id.includes('Web')) return 'web-hooks';
-            if (id.includes('Media')) return 'media-hooks';
-            if (id.includes('Device')) return 'device-hooks';
-            if (id.includes('File')) return 'file-hooks';
-            return 'misc-hooks';
-          }
-        }
+        inlineDynamicImports: true
       }
     }
   }
