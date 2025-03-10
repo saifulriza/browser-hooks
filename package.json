@@ -1,6 +1,6 @@
 {
   "name": "browser-hooks",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Framework agnostic browser API utilities",
   "type": "module",
   "main": "./dist/browser-hooks.umd.cjs",

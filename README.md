@@ -11,9 +11,6 @@ npm install browser-hooks
 
 ### CDN
 ```html
-<!-- UMD version -->
-<script src="https://unpkg.com/browser-hooks@1.0.0/dist/browser-hooks.umd.cjs"></script>
-
 <!-- ES Module version -->
 <script type="module">
   import { useNotifications } from 'https://unpkg.com/browser-hooks@1.0.0/dist/browser-hooks.js';
