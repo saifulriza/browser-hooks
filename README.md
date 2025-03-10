@@ -2,21 +2,50 @@
 
 A comprehensive collection of framework-agnostic browser API utilities exposed as hooks.
 
+#### Live Demo : https://saifulriza.github.io/browser-hooks
+#### Demo Code : https://github.com/saifulriza/browser-hooks/tree/main/examples
+
 ## Installation
 
 ### NPM
+
 ```bash
 npm install browser-hooks
 ```
 
 ### CDN
+
 ```html
 <!-- UMD version -->
 <script src="https://unpkg.com/browser-hooks@0.0.3/dist/browser-hooks.umd.js"></script>
 
+<script>
+  // Using Notifications (example)
+  const notifications = BrowserHooks.useNotifications();
+  notifications.show("Hello!", {
+    body: "This is a notification from Browser Hooks",
+    icon: "path/to/icon.png",
+    onClick: () => console.log("Notification clicked!"),
+    onClose: () => console.log("Notification closed"),
+    onError: () => console.log("Notification error occurred"),
+    onShow: () => console.log("Notification shown"),
+  });
+</script>
+
 <!-- ES Module version -->
 <script type="module">
-  import { useNotifications } from 'https://unpkg.com/browser-hooks@0.0.3/dist/browser-hooks.es.js';
+  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.3/dist/browser-hooks.es.js";
+
+  // Using Notifications (example)
+  const notifications = useNotifications();
+  notifications.show("Demo Notification", {
+    body: "This is a demo notification",
+    icon: "path/to/icon.png",
+    onClick: () => console.log("Notification clicked!"),
+    onClose: () => console.log("Notification closed"),
+    onError: () => console.log("Notification error occurred"),
+    onShow: () => console.log("Notification shown"),
+  });
 </script>
 ```
 
@@ -25,12 +54,14 @@ npm install browser-hooks
 This library provides hooks for various browser APIs:
 
 ### Storage and Data
+
 - `useLocalStorage` - Local storage operations
 - `useClipboard` - Clipboard API
 - `useFileSystem` - File System API
 - `useFile` - File API operations
 
 ### Media and Display
+
 - `useMediaStream` - Media Stream API
 - `useMediaRecorder` - Media Recording
 - `useMediaSession` - Media Session API
@@ -40,6 +71,7 @@ This library provides hooks for various browser APIs:
 - `useFullscreen` - Fullscreen API
 
 ### Device Features
+
 - `useDeviceOrientation` - Device Orientation API
 - `useDeviceMemory` - Device Memory API
 - `useDevicePosture` - Device Posture API
@@ -49,6 +81,7 @@ This library provides hooks for various browser APIs:
 - `useWebNFC` - Web NFC API
 
 ### Communication
+
 - `useWebRTC` - WebRTC functionality
 - `useBroadcastChannel` - BroadcastChannel API
 - `useMessageChannel` - MessageChannel API
@@ -56,18 +89,21 @@ This library provides hooks for various browser APIs:
 - `useBeacon` - Beacon API
 
 ### Security and Authentication
+
 - `useWebAuthn` - Web Authentication API
 - `useWebCrypto` - Web Crypto API
 - `useCredentialManagement` - Credential Management API
 - `usePermissions` - Permissions API
 
 ### Performance and Monitoring
+
 - `usePerformance` - Performance API
 - `useResourceTiming` - Resource Timing API
 - `useIdleDetection` - Idle Detection API
 - `useNetwork` - Network Information API
 
 ### UI and Interaction
+
 - `usePointerEvents` - Pointer Events
 - `usePointerLock` - Pointer Lock API
 - `useDragAndDrop` - Drag and Drop API
@@ -79,26 +115,29 @@ This library provides hooks for various browser APIs:
 ## Usage Examples
 
 ### Using Local Storage
+
 ```typescript
-import { useLocalStorage } from 'browser-hooks';
+import { useLocalStorage } from "browser-hooks";
 
 const { getItem, setItem, removeItem } = useLocalStorage();
-setItem('key', 'value');
-const value = getItem('key');
+setItem("key", "value");
+const value = getItem("key");
 ```
 
 ### Using Notifications
+
 ```typescript
-import { useNotifications } from 'browser-hooks';
+import { useNotifications } from "browser-hooks";
 
 const { requestPermission, sendNotification } = useNotifications();
 await requestPermission();
-sendNotification('Title', { body: 'Message body' });
+sendNotification("Title", { body: "Message body" });
 ```
 
 ### Using Media Stream
+
 ```typescript
-import { useMediaStream } from 'browser-hooks';
+import { useMediaStream } from "browser-hooks";
 
 const { getVideoStream } = useMediaStream();
 const stream = await getVideoStream();

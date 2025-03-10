@@ -894,6 +894,10 @@ The quick brown fox jumps over the lazy dog</textarea
         notifications.show("Demo Notification", {
           body: "This is a demo notification",
           icon: "path/to/icon.png",
+          onClick: () => console.log("Notification clicked!"),
+          onClose: () => console.log("Notification closed"),
+          onError: () => console.log("Notification error occurred"),
+          onShow: () => console.log("Notification shown"),
         });
       };
 
