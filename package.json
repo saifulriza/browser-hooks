@@ -27,8 +27,23 @@
     "browser",
     "api",
     "hooks",
-    "utilities"
+    "utilities",
+    "typescript",
+    "browser-api",
+    "web-api",
+    "react-hooks",
+    "vanilla-js"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saifulriza/browser-hooks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/saifulriza/browser-hooks/issues"
+  },
+  "homepage": "https://github.com/saifulriza/browser-hooks#readme",
+  "unpkg": "./dist/browser-hooks.umd.cjs",
+  "jsdelivr": "./dist/browser-hooks.umd.cjs",
   "author": "",
   "license": "MIT",
   "devDependencies": {

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Hooks ESM Example</title>
+</head>
+<body>
+    <h1>Browser Hooks ESM Example</h1>
+    <div id="media">
+        <button id="startCamera">Start Camera</button>
+        <video id="videoPreview" autoplay playsinline></video>
+        <button id="startRecording">Start Recording</button>
+        <button id="stopRecording">Stop Recording</button>
+    </div>
+
+    <script type="module">
+        import { useMediaStream, useMediaRecorder } from 'https://unpkg.com/browser-hooks@1.0.0/dist/browser-hooks.js';
+
+        // Using MediaStream for camera access
+        const { getVideoStream } = useMediaStream();
+        const videoElement = document.getElementById('videoPreview');
+        let mediaStream;
+
+        document.getElementById('startCamera').onclick = async () => {
+            try {
+                mediaStream = await getVideoStream();
+                videoElement.srcObject = mediaStream;
+            } catch (error) {
+                console.error('Failed to access camera:', error);
+            }
+        };
+
+        // Using MediaRecorder
+        const { startRecording, stopRecording } = useMediaRecorder();
+        let recorder;
+
+        document.getElementById('startRecording').onclick = () => {
+            if (mediaStream) {
+                recorder = startRecording(mediaStream);
+            }
+        };
+
+        document.getElementById('stopRecording').onclick = async () => {
+            if (recorder) {
+                const blob = await stopRecording(recorder);
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'recording.webm';
+                a.click();
+            }
+        };
+    </script>
+</body>
+</html>
