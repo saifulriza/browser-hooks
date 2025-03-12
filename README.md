@@ -35,7 +35,7 @@ npm install browser-hooks
 
 <!-- ES Module version -->
 <script type="module">
-  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.6/dist/browser-hooks.es.js";
+  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.6/dist/browser-hooks.js";
 
   // Using Notifications (example)
   const notifications = useNotifications();
