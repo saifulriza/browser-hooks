@@ -6,58 +6,70 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'BrowserHooks',
-      formats: ['es', 'umd'],
-      fileName: (format) => `browser-hooks.${format}.js`
+      formats: ['es', 'cjs', 'umd'],
+      fileName: (format) => `browser-hooks.${format === 'es' ? 'js' : format === 'cjs' ? 'cjs' : 'umd.js'}`
     },
     sourcemap: true,
     minify: 'terser',
     target: 'es2020',
     terserOptions: {
-      ecma: 2020,
       compress: {
+        arrows: true,
+        arguments: true,
+        booleans_as_integers: true,
+        booleans: true,
+        collapse_vars: true,
+        comparisons: true,
+        computed_props: true,
+        conditionals: true,
+        dead_code: true,
+        directives: true,
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
-        passes: 3,
-        module: true,
-        toplevel: true,
-        unsafe_math: true,
-        unsafe_arrows: true,
+        ecma: 2020,
+        evaluate: true,
+        hoist_props: true,
+        hoist_vars: false,
+        if_return: true,
+        inline: true,
+        join_vars: true,
+        keep_classnames: false,
         keep_fargs: false,
-        unsafe_methods: true,
-        pure_getters: true,
-        unsafe_proto: true,
-        unsafe_undefined: true
+        keep_fnames: false,
+        loops: true,
+        module: true,
+        negate_iife: true,
+        passes: 3,
+        properties: true,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        toplevel: true,
+        typeofs: true,
+        unused: true
       },
       mangle: {
-        properties: false,
-        module: true,
+        eval: true,
         keep_classnames: false,
-        keep_fnames: false
+        keep_fnames: false,
+        module: true,
+        toplevel: true,
+        properties: {
+          regex: /^_/
+        }
       },
       format: {
         comments: false,
         ecma: 2020,
         wrap_iife: true,
-        beautify: false
-      },
-      module: true,
-      toplevel: true
+        ascii_only: true
+      }
     },
     rollupOptions: {
+      external: [],
       output: {
-        inlineDynamicImports: true,
-        format: 'es',
-        preserveModules: false,
-        generatedCode: 'es2015',
-        compact: true,
-        hoistTransitiveImports: true,
-        minifyInternalExports: true
-      },
-      treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        tryCatchDeoptimization: false
+        globals: {},
+        exports: 'named'
       }
     }
   }

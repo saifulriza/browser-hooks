@@ -1,16 +1,17 @@
 {
   "name": "browser-hooks",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Framework agnostic browser API utilities",
   "type": "module",
-  "main": "./dist/browser-hooks.umd.js",
-  "module": "./dist/browser-hooks.es.js",
+  "main": "./dist/browser-hooks.cjs",
+  "module": "./dist/browser-hooks.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/browser-hooks.js",
-      "require": "./dist/browser-hooks.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/browser-hooks.cjs",
+      "default": "./dist/browser-hooks.js"
     }
   },
   "files": [

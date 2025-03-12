@@ -18,7 +18,7 @@ npm install browser-hooks
 
 ```html
 <!-- UMD version -->
-<script src="https://unpkg.com/browser-hooks@0.0.4/dist/browser-hooks.umd.js"></script>
+<script src="https://unpkg.com/browser-hooks@0.0.5/dist/browser-hooks.umd.js"></script>
 
 <script>
   // Using Notifications (example)
@@ -35,7 +35,7 @@ npm install browser-hooks
 
 <!-- ES Module version -->
 <script type="module">
-  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.4/dist/browser-hooks.es.js";
+  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.5/dist/browser-hooks.es.js";
 
   // Using Notifications (example)
   const notifications = useNotifications();
