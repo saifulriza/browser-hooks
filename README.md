@@ -18,7 +18,7 @@ npm install browser-hooks
 
 ```html
 <!-- UMD version -->
-<script src="https://unpkg.com/browser-hooks@0.0.5/dist/browser-hooks.umd.js"></script>
+<script src="https://unpkg.com/browser-hooks@0.0.6/dist/browser-hooks.umd.js"></script>
 
 <script>
   // Using Notifications (example)
@@ -35,7 +35,7 @@ npm install browser-hooks
 
 <!-- ES Module version -->
 <script type="module">
-  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.5/dist/browser-hooks.es.js";
+  import { useNotifications } from "https://unpkg.com/browser-hooks@0.0.6/dist/browser-hooks.es.js";
 
   // Using Notifications (example)
   const notifications = useNotifications();
@@ -48,6 +48,40 @@ npm install browser-hooks
     onShow: () => console.log("Notification shown"),
   });
 </script>
+```
+
+```vue
+<script setup>
+import { useNotifications } from 'browser-hooks'
+const notifications = useNotifications()
+
+const requestNotification = async () => {
+  try {
+    await notifications.requestPermission()
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const showNotification = () => {
+  notifications.show('Demo Notification', {
+    body: 'This is a demo notification',
+    icon: 'path/to/icon.png',
+    onClick: () => console.log('Notification clicked!'),
+    onClose: () => console.log('Notification closed'),
+    onError: () => console.log('Notification error occurred'),
+    onShow: () => console.log('Notification shown'),
+  })
+}
+</script>
+
+<template>
+  <main>
+    <button @click="requestNotification">Request Permission</button>
+    <button @click="showNotification">Show Notification</button>
+  </main>
+</template>
+
 ```
 
 ## Available Hooks
@@ -120,9 +154,9 @@ This library provides hooks for various browser APIs:
 ```typescript
 import { useLocalStorage } from "browser-hooks";
 
-const { getItem, setItem, removeItem } = useLocalStorage();
-setItem("key", "value");
-const value = getItem("key");
+const { getValue, setValue } = useLocalStorage("my-key", "initial-value");
+const value = getValue();
+setValue("new-value");
 ```
 
 ### Using Notifications
@@ -130,9 +164,15 @@ const value = getItem("key");
 ```typescript
 import { useNotifications } from "browser-hooks";
 
-const { requestPermission, sendNotification } = useNotifications();
-await requestPermission();
-sendNotification("Title", { body: "Message body" });
+const notifications = useNotifications();
+notifications.show("Hello!", {
+  body: "This is a notification from Browser Hooks",
+  icon: "path/to/icon.png",
+  onClick: () => console.log("Notification clicked!"),
+  onClose: () => console.log("Notification closed"),
+  onError: () => console.log("Notification error occurred"),
+  onShow: () => console.log("Notification shown"),
+});
 ```
 
 ### Using Media Stream
@@ -140,8 +180,17 @@ sendNotification("Title", { body: "Message body" });
 ```typescript
 import { useMediaStream } from "browser-hooks";
 
-const { getVideoStream } = useMediaStream();
+const mediaStream = useMediaStream();
+const { getState, getVideoStream, stopStream } = mediaStream;
+
+// Get video stream
 const stream = await getVideoStream();
+
+// Stop all streams
+stopStream();
+
+// Check current state
+const state = getState();
 ```
 
 ## Browser Support
